@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Page Reorder | পিডিএফ পৃষ্ঠা পুনর্বিন্যাস</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.16.0/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .page-list {
+            list-style-type: none;
+            padding: 0;
+            min-height: 200px;
+        }
+        .page-item {
+            padding: 10px 15px;
+            margin: 5px 0;
+            background-color: #e9f7fe;
+            border: 1px solid #b3e0ff;
+            border-radius: 4px;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page-item:hover {
+            background-color: #d0ebff;
+        }
+        .buttons {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #uploadPdf {
+            background-color: #2196F3;
+        }
+        #uploadPdf:hover {
+            background-color: #0b7dda;
+        }
+        #downloadPdf {
+            background-color: #ff9800;
+        }
+        #downloadPdf:hover {
+            background-color: #e68a00;
+        }
+        #reset {
+            background-color: #f44336;
+        }
+        #reset:hover {
+            background-color: #d32f2f;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            padding: 3px 8px;
+            font-size: 12px;
+        }
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        .language-toggle {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .language-toggle button {
+            padding: 5px 10px;
+            background-color: #ddd;
+            color: #333;
+        }
+        #fileInfo {
+            margin: 10px 0;
+            font-style: italic;
+            color: #666;
+        }
+        #pdfPreview {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .thumbnail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .thumbnail {
+            width: 100px;
+            height: 140px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+            overflow: hidden;
+        }
+        .thumbnail img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .drop-area {
+            border: 2px dashed #bbb;
+            border-radius: 5px;
+            padding: 25px;
+            text-align: center;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .drop-area.highlight {
+            border-color: #4CAF50;
+            background-color: #f0fff0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()">বাংলা/English</button>
+        </div>
+        
+        <h1 id="title">PDF Page Reordering</h1>
+        <p id="instructions">Upload a PDF file, then drag and drop pages to reorder them.</p>
+        
+        <div id="dropArea" class="drop-area">
+            <p id="dropText">Drag & drop your PDF file here or click to browse</p>
+            <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+        </div>
+        
+        <div id="fileInfo"></div>
+        
+        <div class="buttons">
+            <button id="uploadPdf">Upload PDF</button>
+            <button id="downloadPdf" disabled>Download Reordered PDF</button>
+            <button id="reset">Reset</button>
+        </div>
+        
+        <div id="pdfPreview"></div>
+        
+        <ul id="pageList" class="page-list">
+            <!-- PDF pages will be listed here -->
+        </ul>
+    </div>
+
+    <script>
+        // Language toggle
+        let currentLanguage = 'en';
+        let pdfDoc = null;
+        let pageThumbnails = [];
+        
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'bn' : 'en';
+            updateLanguage();
+        }
+        
+        function updateLanguage() {
+            if (currentLanguage === 'en') {
+                document.getElementById('title').textContent = 'PDF Page Reordering';
+                document.getElementById('instructions').textContent = 'Upload a PDF file, then drag and drop pages to reorder them.';
+                document.getElementById('dropText').textContent = 'Drag & drop your PDF file here or click to browse';
+                document.getElementById('uploadPdf').textContent = 'Upload PDF';
+                document.getElementById('downloadPdf').textContent = 'Download Reordered PDF';
+                document.getElementById('reset').textContent = 'Reset';
+                document.querySelector('.language-toggle button').textContent = 'বাংলা/English';
+                
+                // Update existing page items if any
+                const pageItems = document.querySelectorAll('.page-item span');
+                pageItems.forEach((item, index) => {
+                    if (item.textContent === `পৃষ্ঠা ${index + 1}`) {
+                        item.textContent = `Page ${index + 1}`;
+                    }
+                });
+                
+                // Update delete buttons
+                const deleteButtons = document.querySelectorAll('.delete-btn');
+                deleteButtons.forEach(btn => {
+                    if (btn.textContent === 'মুছুন') {
+                        btn.textContent = 'Delete';
+                    }
+                });
+            } else {
+                document.getElementById('title').textContent = 'পিডিএফ পৃষ্ঠা পুনর্বিন্যাস';
+                document.getElementById('instructions').textContent = 'একটি পিডিএফ ফাইল আপলোড করুন, তারপর পৃষ্ঠাগুলি পুনর্বিন্যাস করতে টেনে এনে ছেড়ে দিন।';
+                document.getElementById('dropText').textContent = 'আপনার পিডিএফ ফাইল এখানে টেনে এনে ছেড়ে দিন বা ব্রাউজ করতে ক্লিক করুন';
+                document.getElementById('uploadPdf').textContent = 'পিডিএফ আপলোড করুন';
+                document.getElementById('downloadPdf').textContent = 'পুনর্বিন্যাস করা পিডিএফ ডাউনলোড করুন';
+                document.getElementById('reset').textContent = 'রিসেট';
+                document.querySelector('.language-toggle button').textContent = 'বাংলা/English';
+                
+                // Update existing page items if any
+                const pageItems = document.querySelectorAll('.page-item span');
+                pageItems.forEach((item, index) => {
+                    if (item.textContent === `Page ${index + 1}`) {
+                        item.textContent = `পৃষ্ঠা ${index + 1}`;
+                    }
+                });
+                
+                // Update delete buttons
+                const deleteButtons = document.querySelectorAll('.delete-btn');
+                deleteButtons.forEach(btn => {
+                    if (btn.textContent === 'Delete') {
+                        btn.textContent = 'মুছুন';
+                    }
+                });
+            }
+        }
+        
+        // PDF handling
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const pageList = document.getElementById('pageList');
+        const pdfPreview = document.getElementById('pdfPreview');
+        const fileInfo = document.getElementById('fileInfo');
+        const downloadBtn = document.getElementById('downloadPdf');
+        const resetBtn = document.getElementById('reset');
+        
+        // Event listeners
+        dropArea.addEventListener('click', () => fileInput.click());
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('highlight');
+        });
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('highlight');
+        });
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.classList.remove('highlight');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileUpload(e.dataTransfer.files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+        
+        document.getElementById('uploadPdf').addEventListener('click', () => fileInput.click());
+        
+        downloadBtn.addEventListener('click', downloadReorderedPdf);
+        resetBtn.addEventListener('click', resetTool);
+        
+        async function handleFileUpload(file) {
+            if (file.type !== 'application/pdf') {
+                alert(currentLanguage === 'en' 
+                    ? 'Please upload a PDF file.' 
+                    : 'একটি পিডিএফ ফাইল আপলোড করুন।');
+                return;
+            }
+            
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                
+                // Display file info
+                fileInfo.textContent = currentLanguage === 'en'
+                    ? `File: ${file.name} (${pdfDoc.getPageCount()} pages)`
+                    : `ফাইল: ${file.name} (${pdfDoc.getPageCount()} পৃষ্ঠা)`;
+                
+                // Enable download button
+                downloadBtn.disabled = false;
+                
+                // Clear previous content
+                pageList.innerHTML = '';
+                pdfPreview.innerHTML = '';
+                pageThumbnails = [];
+                
+                // Create page list and thumbnails
+                const thumbnailContainer = document.createElement('div');
+                thumbnailContainer.className = 'thumbnail-container';
+                pdfPreview.appendChild(thumbnailContainer);
+                
+                for (let i = 0; i < pdfDoc.getPageCount(); i++) {
+                    addPageToList(i);
+                    
+                    // Create thumbnail placeholder (actual thumbnails would require more complex processing)
+                    const thumbnail = document.createElement('div');
+                    thumbnail.className = 'thumbnail';
+                    thumbnail.innerHTML = `<span>${currentLanguage === 'en' ? 'Page' : 'পৃষ্ঠা'} ${i + 1}</span>`;
+                    thumbnailContainer.appendChild(thumbnail);
+                    pageThumbnails.push(thumbnail);
+                }
+                
+            } catch (error) {
+                console.error('Error loading PDF:', error);
+                alert(currentLanguage === 'en'
+                    ? 'Error loading PDF file. Please try another file.'
+                    : 'পিডিএফ ফাইল লোড করতে ত্রুটি হয়েছে। অন্য একটি ফাইল চেষ্টা করুন।');
+            }
+        }
+        
+        function addPageToList(index) {
+            const newPage = document.createElement('li');
+            newPage.className = 'page-item';
+            newPage.draggable = true;
+            newPage.dataset.index = index;
+            
+            newPage.innerHTML = `
+                <span>${currentLanguage === 'en' ? 'Page' : 'পৃষ্ঠা'} ${index + 1}</span>
+                <button class="delete-btn">${currentLanguage === 'en' ? 'Delete' : 'মুছুন'}</button>
+            `;
+            
+            pageList.appendChild(newPage);
+            
+            // Add event listeners for drag and drop
+            newPage.addEventListener('dragstart', dragStart);
+            newPage.addEventListener('dragover', dragOver);
+            newPage.addEventListener('drop', drop);
+            newPage.addEventListener('dragend', dragEnd);
+            
+            // Add delete functionality
+            newPage.querySelector('.delete-btn').addEventListener('click', function() {
+                if (confirm(currentLanguage === 'en' 
+                    ? 'Are you sure you want to remove this page from the reordered PDF?' 
+                    : 'আপনি কি নিশ্চিত যে আপনি এই পৃষ্ঠাটি পুনর্বিন্যাস করা পিডিএফ থেকে সরাতে চান?')) {
+                    newPage.remove();
+                }
+            });
+        }
+        
+        // Drag and drop functions
+        let draggedItem = null;
+        
+        function dragStart(e) {
+            draggedItem = this;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+            setTimeout(() => this.style.opacity = '0.4', 0);
+        }
+        
+        function dragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+        
+        function drop(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            if (draggedItem !== this) {
+                const fromIndex = Array.from(pageList.children).indexOf(draggedItem);
+                const toIndex = Array.from(pageList.children).indexOf(this);
+                
+                if (fromIndex < toIndex) {
+                    pageList.insertBefore(draggedItem, this.nextSibling);
+                } else {
+                    pageList.insertBefore(draggedItem, this);
+                }
+            }
+            
+            return false;
+        }
+        
+        function dragEnd() {
+            this.style.opacity = '1';
+        }
+        
+        async function downloadReorderedPdf() {
+            if (!pdfDoc || pageList.children.length === 0) return;
+            
+            try {
+                // Create a new PDF with the reordered pages
+                const newPdf = await PDFLib.PDFDocument.create();
+                
+                // Get the page indices in the new order
+                const pageIndices = Array.from(pageList.children).map(item => parseInt(item.dataset.index));
+                
+                // Copy pages from original PDF in the new order
+                const pages = await newPdf.copyPages(pdfDoc, pageIndices);
+                pages.forEach(page => newPdf.addPage(page));
+                
+                // Save the new PDF
+                const pdfBytes = await newPdf.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                
+                // Generate filename
+                let filename = 'reordered.pdf';
+                if (fileInput.files.length) {
+                    const originalName = fileInput.files[0].name.replace('.pdf', '');
+                    filename = `${originalName}_reordered.pdf`;
+                }
+                
+                // Download the file
+                saveAs(blob, filename);
+                
+                alert(currentLanguage === 'en'
+                    ? 'PDF downloaded successfully with the new page order!'
+                    : 'নতুন পৃষ্ঠা ক্রম সহ পিডিএফ সফলভাবে ডাউনলোড করা হয়েছে!');
+                
+            } catch (error) {
+                console.error('Error creating reordered PDF:', error);
+                alert(currentLanguage === 'en'
+                    ? 'Error creating reordered PDF. Please try again.'
+                    : 'পুনর্বিন্যাস করা পিডিএফ তৈরি করতে ত্রুটি হয়েছে। আবার চেষ্টা করুন।');
+            }
+        }
+        
+        function resetTool() {
+            if (confirm(currentLanguage === 'en'
+                ? 'Are you sure you want to reset? This will clear all uploaded PDFs and reordering.'
+                : 'আপনি কি রিসেট করতে নিশ্চিত? এটি সমস্ত আপলোড করা পিডিএফ এবং পুনর্বিন্যাস সাফ করবে।')) {
+                pdfDoc = null;
+                pageThumbnails = [];
+                fileInput.value = '';
+                pageList.innerHTML = '';
+                pdfPreview.innerHTML = '';
+                fileInfo.textContent = '';
+                downloadBtn.disabled = true;
+                dropArea.classList.remove('highlight');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel to PDF Converter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .converter-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .upload-area {
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            background-color: #f8fafc;
+        }
+        .upload-area.highlight {
+            background-color: #e8f4fc;
+            border-color: #2980b9;
+        }
+        #file-input {
+            display: none;
+        }
+        .upload-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            margin-bottom: 15px;
+        }
+        .upload-btn:hover {
+            background-color: #2980b9;
+        }
+        .convert-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .convert-btn:hover {
+            background-color: #219653;
+        }
+        .convert-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .file-info {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        .progress-container {
+            margin-top: 25px;
+            display: none;
+        }
+        progress {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+        }
+        .status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .preview {
+            margin-top: 20px;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .options {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .option-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        select, input {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Excel to PDF Converter</h1>
+    
+    <div class="converter-container">
+        <div class="upload-area" id="upload-area">
+            <h3>Upload Excel File</h3>
+            <input type="file" id="file-input" accept=".xlsx,.xls,.csv">
+            <button class="upload-btn" id="upload-btn">Select Excel File</button>
+            <p>or drag and drop Excel file here</p>
+            <div class="file-info" id="file-info"></div>
+        </div>
+        
+        <div class="options">
+            <div class="option-group">
+                <label for="page-size">Page Size:</label>
+                <select id="page-size">
+                    <option value="a4">A4</option>
+                    <option value="letter">Letter</option>
+                    <option value="legal">Legal</option>
+                </select>
+            </div>
+            <div class="option-group">
+                <label for="page-orientation">Orientation:</label>
+                <select id="page-orientation">
+                    <option value="portrait">Portrait</option>
+                    <option value="landscape">Landscape</option>
+                </select>
+            </div>
+            <div class="option-group">
+                <label for="font-size">Font Size:</label>
+                <select id="font-size">
+                    <option value="10">10pt</option>
+                    <option value="11">11pt</option>
+                    <option value="12" selected>12pt</option>
+                    <option value="14">14pt</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="preview" id="preview">
+            <h4>Data Preview</h4>
+            <div id="table-preview"></div>
+        </div>
+        
+        <div class="progress-container" id="progress-container">
+            <progress id="progress-bar" value="0" max="100"></progress>
+            <div id="progress-text">Processing: 0%</div>
+        </div>
+        
+        <button class="convert-btn" id="convert-btn" disabled>Convert to PDF</button>
+        
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        // Initialize jsPDF
+        const { jsPDF } = window.jspdf;
+        
+        // DOM elements
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const uploadBtn = document.getElementById('upload-btn');
+        const fileInfo = document.getElementById('file-info');
+        const convertBtn = document.getElementById('convert-btn');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const statusDiv = document.getElementById('status');
+        const previewDiv = document.getElementById('preview');
+        const tablePreview = document.getElementById('table-preview');
+        const pageSize = document.getElementById('page-size');
+        const pageOrientation = document.getElementById('page-orientation');
+        const fontSize = document.getElementById('font-size');
+        
+        let excelFile = null;
+        let workbookData = null;
+        
+        // Set up event listeners
+        uploadBtn.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                excelFile = e.target.files[0];
+                updateFileInfo(excelFile);
+                convertBtn.disabled = false;
+                previewDiv.style.display = 'none';
+                loadAndPreviewExcel(excelFile);
+            }
+        });
+        
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('highlight');
+        });
+        
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('highlight');
+        });
+        
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('highlight');
+            
+            if (e.dataTransfer.files.length) {
+                const file = e.dataTransfer.files[0];
+                if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls') || file.name.endsWith('.csv')) {
+                    excelFile = file;
+                    updateFileInfo(excelFile);
+                    convertBtn.disabled = false;
+                    previewDiv.style.display = 'none';
+                    loadAndPreviewExcel(excelFile);
+                } else {
+                    showStatus('Please upload an Excel file (.xlsx, .xls, .csv)', 'error');
+                }
+            }
+        });
+        
+        // Load and preview Excel file
+        function loadAndPreviewExcel(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    workbookData = workbook;
+                    
+                    // Show preview of first sheet
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const html = XLSX.utils.sheet_to_html(worksheet);
+                    tablePreview.innerHTML = html;
+                    previewDiv.style.display = 'block';
+                    
+                    showStatus('File loaded successfully. Preview shown below.', 'success');
+                } catch (error) {
+                    console.error('Error loading Excel file:', error);
+                    showStatus('Error loading Excel file: ' + error.message, 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        // Convert button click handler
+        convertBtn.addEventListener('click', async () => {
+            if (!workbookData) return;
+            
+            try {
+                convertBtn.disabled = true;
+                progressContainer.style.display = 'block';
+                statusDiv.style.display = 'none';
+                
+                // Create PDF
+                const pdf = new jsPDF({
+                    orientation: pageOrientation.value,
+                    unit: 'mm',
+                    format: pageSize.value
+                });
+                
+                const sheetNames = workbookData.SheetNames;
+                const totalSheets = sheetNames.length;
+                
+                for (let i = 0; i < totalSheets; i++) {
+                    const sheetName = sheetNames[i];
+                    const worksheet = workbookData.Sheets[sheetName];
+                    
+                    // Convert sheet to JSON
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    
+                    // Add sheet name as title
+                    if (i > 0) {
+                        pdf.addPage();
+                    }
+                    
+                    pdf.setFontSize(16);
+                    pdf.text(sheetName, 14, 20);
+                    
+                    // Prepare data for autotable
+                    const headers = jsonData[0] || [];
+                    const body = jsonData.slice(1);
+                    
+                    // Add table to PDF
+                    pdf.autoTable({
+                        head: [headers],
+                        body: body,
+                        startY: 25,
+                        styles: {
+                            fontSize: parseInt(fontSize.value),
+                            cellPadding: 3,
+                            overflow: 'linebreak'
+                        },
+                        margin: { top: 20 }
+                    });
+                    
+                    // Update progress
+                    const progress = Math.round(((i + 1) / totalSheets) * 100);
+                    progressBar.value = progress;
+                    progressText.textContent = `Processing: ${progress}%`;
+                }
+                
+                // Save the PDF
+                const filename = excelFile.name.replace(/\.[^/.]+$/, '') + '.pdf';
+                pdf.save(filename);
+                
+                showStatus('Conversion completed successfully!', 'success');
+            } catch (error) {
+                console.error('Conversion error:', error);
+                showStatus(`Error during conversion: ${error.message}`, 'error');
+            } finally {
+                convertBtn.disabled = false;
+                progressContainer.style.display = 'none';
+            }
+        });
+        
+        // Update file info display
+        function updateFileInfo(file) {
+            fileInfo.innerHTML = `
+                <strong>Selected file:</strong> ${file.name}<br>
+                <strong>Size:</strong> ${formatFileSize(file.size)}
+            `;
+        }
+        
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Show status message
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + type;
+            statusDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

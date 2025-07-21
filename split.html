@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Split PDF Tool</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    input, button {
+      margin: 10px 0;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔪 Split PDF Tool (Offline)</h2>
+  <input type="file" id="pdfInput" accept="application/pdf" /><br>
+  <label>Start Page:</label>
+  <input type="number" id="startPage" value="1" min="1"><br>
+  <label>End Page:</label>
+  <input type="number" id="endPage" value="2" min="1"><br>
+  <button onclick="splitPDF()">Split & Download</button>
+
+  <script>
+    async function splitPDF() {
+      const file = document.getElementById('pdfInput').files[0];
+      if (!file) return alert("Please upload a PDF file!");
+
+      const start = parseInt(document.getElementById("startPage").value) - 1;
+      const end = parseInt(document.getElementById("endPage").value) - 1;
+
+      const existingPdfBytes = await file.arrayBuffer();
+      const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+      const newPdf = await PDFLib.PDFDocument.create();
+
+      for (let i = start; i <= end && i < pdfDoc.getPageCount(); i++) {
+        const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
+        newPdf.addPage(copiedPage);
+      }
+
+      const pdfBytes = await newPdf.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "split.pdf";
+      link.click();
+    }
+  </script>
+</body>
+</html>

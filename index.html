@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF & Document Tools</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background-color: #4a6baf;
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Search Bar */
+        .search-container {
+            margin: 20px 0 30px;
+            position: relative;
+        }
+        .search-container input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding-left: 45px;
+        }
+        .search-container i {
+            position: absolute;
+            left: 15px;
+            top: 14px;
+            color: #777;
+        }
+        
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .tool-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 220px; /* Fixed height for consistency */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .tool-card h2 {
+            color: #4a6baf;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        .tool-icon {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: #4a6baf;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tool-card p {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            color: #666;
+            flex-grow: 1;
+        }
+        .tool-card a {
+            display: inline-block;
+            background-color: #4a6baf;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+        }
+        .tool-card a:hover {
+            background-color: #3a5a9f;
+        }
+        
+        /* Size Toggle */
+        .size-toggle {
+            text-align: right;
+            margin-bottom: 15px;
+        }
+        .size-toggle button {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 5px;
+            border-radius: 4px;
+        }
+        .size-toggle button.active {
+            background: #4a6baf;
+            color: white;
+            border-color: #4a6baf;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .tool-card {
+                height: 200px;
+            }
+        }
+        
+        /* Hidden class for search */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Document Conversion Tools</h1>
+            <p class="tagline">All your PDF and document needs in one place</p>
+        </header>
+
+        <!-- Search and Size Controls -->
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search tools...">
+        </div>
+        
+        <div class="size-toggle">
+            <span>Card Size: </span>
+            <button id="sizeSmall" class="active">Small</button>
+            <button id="sizeMedium">Medium</button>
+            <button id="sizeLarge">Large</button>
+        </div>
+
+        <div class="tools-grid" id="toolsContainer">
+            <!-- PDF Tools -->
+            <div class="tool-card" data-name="pdf to word convert conversion">
+                <div class="tool-icon"><i class="fas fa-file-pdf"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-file-word"></i></div>
+                <h2>PDF to Word</h2>
+                <p>Convert your PDF documents to editable Word files while preserving formatting</p>
+                <a href="Pdf-to-word.html">Use Tool</a>
+            </div>
+
+            <div class="tool-card" data-name="pdf page numbering add numbers">
+                <div class="tool-icon"><i class="fas fa-file-pdf"></i> <i class="fas fa-hashtag"></i></div>
+                <h2>PDF Page Numbering</h2>
+                <p>Add customizable page numbers to your PDF documents with various styles</p>
+                <a href="pdf-page-numbering.html">Use Tool</a>
+            </div>
+
+            <div class="tool-card" data-name="pdf image extract extractor">
+                <div class="tool-icon"><i class="fas fa-file-pdf"></i> <i class="fas fa-image"></i></div>
+                <h2>PDF Image Extractor</h2>
+                <p>Extract all images from your PDF files in original quality</p>
+                <a href="pdf-image.html">Use Tool</a>
+            </div>
+
+            <div class="tool-card" data-name="pdf margin adjust adjuster">
+                <div class="tool-icon"><i class="fas fa-file-pdf"></i> <i class="fas fa-ruler"></i></div>
+                <h2>PDF Margin Adjuster</h2>
+                <p>Adjust margins in your PDF documents for printing or readability</p>
+                <a href="pdf-marg.html">Use Tool</a>
+            </div>
+
+            <!-- Excel Tools -->
+            <div class="tool-card" data-name="pdf to excel convert conversion">
+                <div class="tool-icon"><i class="fas fa-file-pdf"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-file-excel"></i></div>
+                <h2>PDF to Excel</h2>
+                <p>Convert PDF tables to editable Excel spreadsheets with accurate data</p>
+                <a href="pdf-to-excel.html">Use Tool</a>
+            </div>
+
+            <div class="tool-card" data-name="excel to pdf convert conversion">
+                <div class="tool-icon"><i class="fas fa-file-excel"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-file-pdf"></i></div>
+                <h2>Excel to PDF</h2>
+                <p>Convert Excel files to PDF documents while maintaining formatting</p>
+                <a href="excel-to-pdf.html">Use Tool</a>
+            </div>
+
+            <!-- Word Tools -->
+            <div class="tool-card" data-name="word to pdf convert conversion">
+                <div class="tool-icon"><i class="fas fa-file-word"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-file-pdf"></i></div>
+                <h2>Word to PDF</h2>
+                <p>Convert Word documents to PDF files with perfect layout preservation</p>
+                <a href="Word-to-pdf.html">Use Tool</a>
+            </div>
+
+            <!-- PDF Management -->
+            <div class="tool-card" data-name="pdf split splitter divide">
+                <div class="tool-icon"><i class="fas fa-file-pdf"></i> <i class="fas fa-cut"></i></div>
+                <h2>PDF Splitter</h2>
+                <p>Split PDF documents into multiple files by pages or custom ranges</p>
+                <a href="split.html">Use Tool</a>
+            </div>
+
+            <div class="tool-card" data-name="pdf delete page remove">
+                <div class="tool-icon"><i class="fas fa-file-pdf"></i> <i class="fas fa-trash-alt"></i></div>
+                <h2>Delete PDF Pages</h2>
+                <p>Remove specific pages from your PDF documents with ease</p>
+                <a href="delete-page.html">Use Tool</a>
+            </div>
+
+            <div class="tool-card" data-name="pdf page reorder rearrange organize">
+                <div class="tool-icon"><i class="fas fa-file-pdf"></i> <i class="fas fa-sort"></i></div>
+                <h2>PDF Page Reorder</h2>
+                <p>Rearrange pages in your PDF documents with drag-and-drop simplicity</p>
+                <a href="page-recoder.html">Use Tool</a>
+            </div>
+
+            <!-- Text Tools -->
+            <div class="tool-card" data-name="pdf to text extract">
+                <div class="tool-icon"><i class="fas fa-file-pdf"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-file-alt"></i></div>
+                <h2>PDF to Text</h2>
+                <p>Extract text content from PDF files while maintaining structure</p>
+                <a href="Pdf-to-text.html">Use Tool</a>
+            </div>
+
+            <div class="tool-card" data-name="text image to pdf create">
+                <div class="tool-icon"><i class="fas fa-file-alt"></i>/<i class="fas fa-image"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-file-pdf"></i></div>
+                <h2>Text/Image to PDF</h2>
+                <p>Create PDFs from text or images with customizable layouts</p>
+                <a href="Text-image-to-pdf.html">Use Tool</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 Document Conversion Tools. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const cards = document.querySelectorAll('.tool-card');
+            
+            cards.forEach(card => {
+                const cardName = card.getAttribute('data-name').toLowerCase();
+                if (cardName.includes(searchTerm)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Card size toggle
+        document.getElementById('sizeSmall').addEventListener('click', function() {
+            setActiveSizeButton('sizeSmall');
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.style.height = '180px';
+                card.querySelector('p').style.fontSize = '0.8rem';
+            });
+        });
+        
+        document.getElementById('sizeMedium').addEventListener('click', function() {
+            setActiveSizeButton('sizeMedium');
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.style.height = '220px';
+                card.querySelector('p').style.fontSize = '0.9rem';
+            });
+        });
+        
+        document.getElementById('sizeLarge').addEventListener('click', function() {
+            setActiveSizeButton('sizeLarge');
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.style.height = '260px';
+                card.querySelector('p').style.fontSize = '1rem';
+            });
+        });
+        
+        function setActiveSizeButton(activeId) {
+            document.querySelectorAll('.size-toggle button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(activeId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

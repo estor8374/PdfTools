@@ -1,66 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-     
-
 
 <url>
   <loc>https://fixpdf.netlify.app/</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>1.00</priority>
 </url>
-<url>
-  <loc>https://fixpdf.netlify.app/pdf-to-word</loc>
+
+<url>  <loc>https://fixpdf.netlify.app/pdf-to-word</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
-<url>
-  <loc>https://fixpdf.netlify.app/word-to-pdf</loc>
+
+<url>  <loc>https://fixpdf.netlify.app/word-to-pdf</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
-<url>
-  <loc>https://fixpdf.netlify.app/pdf-to-excel</loc>
+
+<url>  <loc>https://fixpdf.netlify.app/pdf-to-excel</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
-<url>
-  <loc>https://fixpdf.netlify.app/excel-to-pdf</loc>
+
+<url>  <loc>https://fixpdf.netlify.app/excel-to-pdf</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
+
 <url>
-  <loc>https://fixpdf.netlify.app/pdf-page-numbering</loc>
+<loc>https://fixpdf.netlify.app/pdf-page-numbering</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
+
 <url>
-  <loc>https://fixpdf.netlify.app/pdf-image</loc>
+<loc>https://fixpdf.netlify.app/pdf-image</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
+
 <url>
-  <loc>https://fixpdf.netlify.app/split</loc>
+<loc>https://fixpdf.netlify.app/split</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
+
 <url>
-  <loc>https://fixpdf.netlify.app/delete-page</loc>
+<loc>https://fixpdf.netlify.app/delete-page</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
+
 <url>
-  <loc>https://fixpdf.netlify.app/page-recoder</loc>
+<loc>https://fixpdf.netlify.app/page-recoder</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
+
 <url>
-  <loc>https://fixpdf.netlify.app/pdf-to-text</loc>
+<loc>https://fixpdf.netlify.app/pdf-to-text</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>
+
 <url>
-  <loc>https://fixpdf.netlify.app/text-image-to-pdf</loc>
+<loc>https://fixpdf.netlify.app/text-image-to-pdf</loc>
   <lastmod>2025-07-23T02:51:13+00:00</lastmod>
   <priority>0.80</priority>
 </url>

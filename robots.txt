@@ -1,0 +1,3 @@
+user-agent:*
+Allow:/
+sitemap:https://fixpdf.netlify.app/sitemap.xml

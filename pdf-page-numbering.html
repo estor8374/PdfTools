@@ -1,277 +1,903 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="keywords" content="PDF page numbering, add page numbers to PDF, PDF editor,add page number,add page number on pdf,pdf numdering">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Page Numbering Tool</title>
+    <title>PDF Page Numbering Tool | Add Page Numbers to PDF | devwhim.xyz</title>
+    <meta name="description" content="Free online PDF page numbering tool. Add customizable page numbers to your PDF documents quickly and securely. No uploads required - works entirely in your browser.">
+    <meta name="keywords" content="PDF page numbering, add page numbers to PDF, PDF editor, add page number, PDF numbering, devwhim">
+    <meta name="author" content="devwhim.xyz">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://unpkg.com/downloadjs@1.4.7"></script>
     <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
             line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7ff;
+            padding: 0;
+            margin: 0;
         }
+
         .container {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        h1 {
-            color: #2c3e50;
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
             text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
         }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--success);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-card h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         .upload-area {
-            border: 2px dashed #3498db;
-            border-radius: 5px;
-            padding: 30px;
+            border: 2px dashed #d1d5db;
+            border-radius: var(--border-radius);
+            padding: 2rem;
             text-align: center;
-            margin: 20px 0;
+            margin-bottom: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
+            background-color: #f9fafb;
         }
-        .upload-area:hover {
-            background-color: #f0f8ff;
+
+        .upload-area:hover, .upload-area.highlight {
+            border-color: var(--primary);
+            background-color: #f0f4ff;
         }
-        .upload-area.highlight {
-            background-color: #e1f0fa;
-            border-color: #2980b9;
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
         }
-        #fileInput {
-            display: none;
+
+        .upload-area p {
+            color: var(--gray);
+            margin-bottom: 1rem;
         }
-        button {
-            background-color: #3498db;
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            margin: 5px;
+            transition: var(--transition);
+            text-align: center;
+            font-size: 1rem;
         }
-        button:hover {
-            background-color: #2980b9;
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
         }
-        button:disabled {
-            background-color: #95a5a6;
-            cursor: not-allowed;
+
+        .btn-secondary {
+            background: var(--secondary);
         }
-        .status {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 5px;
+
+        .btn-secondary:hover {
+            background: #6511a0;
         }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
+
+        .btn-success {
+            background: #10b981;
         }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
+
+        .btn-success:hover {
+            background: #059669;
         }
-        .options {
-            background-color: #fff;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
-            border: 1px solid #ddd;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        select, input {
+
+        .btn-full {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
         }
+
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            background-color: #9ca3af;
+            transform: none;
+        }
+
+        .file-info {
+            background: #f0f4ff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .file-info.active {
+            display: block;
+        }
+
+        .file-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .options-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .option-group {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .option-group h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        select, input[type="number"], input[type="color"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        input[type="color"] {
+            height: 50px;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            margin-top: 1.5rem;
+            width: 100%;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-links {
+                justify-content: center;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
         .progress-container {
             width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin: 20px 0;
+            background-color: #e5e7eb;
+            border-radius: 50px;
+            overflow: hidden;
+            margin: 1rem 0;
+            height: 10px;
+            display: none;
         }
+
         .progress-bar {
-            height: 20px;
-            background-color: #3498db;
-            border-radius: 5px;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.4s ease;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .preview-area {
+            flex: 1;
+            width: 100%;
+            padding: 1.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: white;
+            overflow-y: auto;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .preview-page {
+            width: 200px;
+            height: 280px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .page-number-preview {
+            position: absolute;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .preview-text {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .format-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .format-option {
+            padding: 0.8rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .format-option:hover {
+            border-color: var(--primary);
+        }
+
+        .format-option.active {
+            border-color: var(--primary);
+            background-color: #f0f4ff;
+        }
+
+        .custom-format-input {
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .custom-format-input.active {
+            display: block;
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <span>🔢</span> PDF Page Numbering Tool
+            </div>
+            <p>Add customizable page numbers to your PDF documents quickly and securely. No uploads required - works entirely in your browser.</p>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>PDF Page Numbering Tool</h1>
-        <p>পেজ নাম্বার বসানো - Add page numbers to your PDF documents</p>
-        
-        <div class="upload-area" id="dropArea">
-            <p>Drag & drop your PDF file here or</p>
-            <input type="file" id="fileInput" accept=".pdf">
-            <button onclick="document.getElementById('fileInput').click()">Select PDF File</button>
+        <div class="main-content">
+            <div class="tool-card">
+                <h2><span>📤</span> Upload PDF</h2>
+                <div class="upload-area" id="dropArea">
+                    <i>📁</i>
+                    <p>Drag & drop your PDF file here</p>
+                    <p>or</p>
+                    <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                    <button class="btn" id="uploadBtn">Choose PDF File</button>
+                </div>
+                <div class="file-info" id="fileInfo">
+                    <p>File: <span class="file-name" id="fileName"></span></p>
+                    <p>Size: <span id="fileSize"></span></p>
+                    <p>Pages: <span id="pageCount">0</span></p>
+                </div>
+                
+                <div class="options-section">
+                    <div class="option-group">
+                        <h3>Page Number Position</h3>
+                        <div class="form-group">
+                            <label for="position">Position:</label>
+                            <select id="position">
+                                <option value="bottom-center">Bottom Center</option>
+                                <option value="bottom-right">Bottom Right</option>
+                                <option value="bottom-left">Bottom Left</option>
+                                <option value="top-center">Top Center</option>
+                                <option value="top-right">Top Right</option>
+                                <option value="top-left">Top Left</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <h3>Number Format</h3>
+                        <div class="format-options">
+                            <div class="format-option active" data-format="1">Page 1</div>
+                            <div class="format-option" data-format="2">1/10</div>
+                            <div class="format-option" data-format="3">Page 1 of 10</div>
+                            <div class="format-option" data-format="4">- 1 -</div>
+                            <div class="format-option" data-format="custom">Custom</div>
+                        </div>
+                        <input type="text" id="customFormat" class="custom-format-input" 
+                               placeholder="Use {page} for current page, {total} for total pages">
+                        <input type="hidden" id="format" value="1">
+                    </div>
+                    
+                    <div class="option-group">
+                        <h3>Appearance</h3>
+                        <div class="form-group">
+                            <label for="fontSize">Font Size:</label>
+                            <input type="number" id="fontSize" min="8" max="72" value="12">
+                        </div>
+                        <div class="form-group">
+                            <label for="startNumber">Starting Number:</label>
+                            <input type="number" id="startNumber" min="1" value="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="color">Text Color:</label>
+                            <input type="color" id="color" value="#000000">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-full" id="addNumbersBtn" disabled>Add Page Numbers</button>
+                    <button class="btn btn-success btn-full" id="downloadBtn" disabled>Download PDF</button>
+                </div>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Adding page numbers...</p>
+                </div>
+                
+                <div class="success-message" id="successMessage">
+                    Page numbers added successfully! Your download should start shortly.
+                </div>
+                
+                <div class="error-message" id="errorMessage">
+                    Error adding page numbers. Please try again.
+                </div>
+            </div>
+            
+            <div class="tool-card">
+                <div class="preview-section">
+                    <h2><span>👁️</span> Live Preview</h2>
+                    <div class="preview-area" id="previewArea">
+                        <div class="preview-page" id="previewPage">
+                            <div class="page-number-preview" id="pageNumberPreview">Page 1</div>
+                        </div>
+                        <p class="preview-text">Preview will update as you change settings</p>
+                    </div>
+                    <div class="option-group">
+                        <h3>How to Use</h3>
+                        <ol style="padding-left: 1.5rem;">
+                            <li style="margin-bottom: 0.5rem;">Upload your PDF file</li>
+                            <li style="margin-bottom: 0.5rem;">Customize the page number settings</li>
+                            <li style="margin-bottom: 0.5rem;">Click "Add Page Numbers" to process</li>
+                            <li>Download your numbered PDF</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <div class="options" id="options" style="display: none;">
-            <h3>Page Number Options</h3>
-            
-            <div class="form-group">
-                <label for="position">Position:</label>
-                <select id="position">
-                    <option value="bottom-center">Bottom Center</option>
-                    <option value="bottom-right">Bottom Right</option>
-                    <option value="bottom-left">Bottom Left</option>
-                    <option value="top-center">Top Center</option>
-                    <option value="top-right">Top Right</option>
-                    <option value="top-left">Top Left</option>
-                </select>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Fast Processing</h3>
+                <p>Add page numbers to your PDF in seconds with our optimized engine.</p>
             </div>
-            
-            <div class="form-group">
-                <label for="format">Format:</label>
-                <select id="format">
-                    <option value="1">Page 1, Page 2,...</option>
-                    <option value="2">1/10, 2/10,...</option>
-                    <option value="3">Page 1 of 10, Page 2 of 10,...</option>
-                    <option value="4">- 1 -, - 2 -,...</option>
-                    <option value="custom">Custom</option>
-                </select>
-                <input type="text" id="customFormat" style="display: none; margin-top: 5px;" 
-                       placeholder="Use {page} for current page, {total} for total pages (e.g., Page {page} of {total})">
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>100% Secure</h3>
+                <p>Your files never leave your device. No uploads, no servers, complete privacy.</p>
             </div>
-            
-            <div class="form-group">
-                <label for="fontSize">Font Size:</label>
-                <input type="number" id="fontSize" min="8" max="72" value="12">
+            <div class="feature-card">
+                <div class="feature-icon">💯</div>
+                <h3>Free to Use</h3>
+                <p>No registration, no watermarks, no limitations. Number as many PDFs as you need.</p>
             </div>
-            
-            <div class="form-group">
-                <label for="startNumber">Starting Number:</label>
-                <input type="number" id="startNumber" min="1" value="1">
-            </div>
-            
-            <div class="form-group">
-                <label for="color">Text Color:</label>
-                <input type="color" id="color" value="#000000">
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Works Everywhere</h3>
+                <p>Use on any device with a modern browser - desktop, tablet, or mobile.</p>
             </div>
         </div>
-        
-        <div class="progress-container" id="progressContainer" style="display: none;">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-        
-        <button id="addNumbersBtn" disabled>Add Page Numbers</button>
-        <button id="downloadBtn" disabled style="background-color: #27ae60;">Download PDF</button>
-        
-        <div id="status" class="status" style="display: none;"></div>
     </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">devwhim.xyz</div>
+                <div class="footer-links">
+                    <a href="#">Home</a>
+                    <a href="#">Tools</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="copyright">
+                    &copy; 2023 devwhim.xyz - Free online PDF tools
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // DOM elements
-        const dropArea = document.getElementById('dropArea');
         const fileInput = document.getElementById('fileInput');
-        const optionsDiv = document.getElementById('options');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const dropArea = document.getElementById('dropArea');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const pageCount = document.getElementById('pageCount');
         const addNumbersBtn = document.getElementById('addNumbersBtn');
         const downloadBtn = document.getElementById('downloadBtn');
-        const statusDiv = document.getElementById('status');
         const progressContainer = document.getElementById('progressContainer');
         const progressBar = document.getElementById('progressBar');
-        const formatSelect = document.getElementById('format');
+        const loading = document.getElementById('loading');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const previewPage = document.getElementById('previewPage');
+        const pageNumberPreview = document.getElementById('pageNumberPreview');
+        const formatOptions = document.querySelectorAll('.format-option');
         const customFormatInput = document.getElementById('customFormat');
+        const formatInput = document.getElementById('format');
+        
+        // Options elements
+        const positionSelect = document.getElementById('position');
+        const fontSizeInput = document.getElementById('fontSize');
+        const startNumberInput = document.getElementById('startNumber');
+        const colorInput = document.getElementById('color');
 
         // Global variables
         let pdfFile = null;
         let modifiedPdfBytes = null;
 
-        // Event listeners for drag and drop
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false);
+        // Event listeners
+        uploadBtn.addEventListener('click', function() {
+            fileInput.click();
         });
 
-        function preventDefaults(e) {
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                handleFileSelection(e.target.files[0]);
+            }
+        });
+
+        // Drag and drop functionality
+        dropArea.addEventListener('dragover', function(e) {
             e.preventDefault();
-            e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropArea.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight() {
             dropArea.classList.add('highlight');
-        }
+        });
 
-        function unhighlight() {
+        dropArea.addEventListener('dragleave', function() {
             dropArea.classList.remove('highlight');
-        }
+        });
 
-        // Handle file drop
-        dropArea.addEventListener('drop', handleDrop, false);
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
+        dropArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            dropArea.classList.remove('highlight');
             
-            if (files.length) {
-                handleFiles(files);
-            }
-        }
-
-        // Handle file selection
-        fileInput.addEventListener('change', function() {
-            if (this.files.length) {
-                handleFiles(this.files);
+            if (e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                if (file.type === 'application/pdf') {
+                    handleFileSelection(file);
+                } else {
+                    showError('Please upload a PDF file.');
+                }
             }
         });
 
-        // Show/hide custom format input
-        formatSelect.addEventListener('change', function() {
-            customFormatInput.style.display = this.value === 'custom' ? 'block' : 'none';
+        // Format option selection
+        formatOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                formatOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                
+                const format = this.getAttribute('data-format');
+                formatInput.value = format;
+                
+                if (format === 'custom') {
+                    customFormatInput.classList.add('active');
+                } else {
+                    customFormatInput.classList.remove('active');
+                }
+                
+                updatePreview();
+            });
         });
 
-        // Process the uploaded file
-        function handleFiles(files) {
-            const file = files[0];
-            
-            if (file.type !== 'application/pdf') {
-                showStatus('Please upload a PDF file.', 'error');
+        // Update preview when settings change
+        [positionSelect, fontSizeInput, startNumberInput, colorInput].forEach(element => {
+            element.addEventListener('change', updatePreview);
+        });
+
+        customFormatInput.addEventListener('input', updatePreview);
+
+        // Add page numbers button
+        addNumbersBtn.addEventListener('click', addPageNumbers);
+
+        // Download button
+        downloadBtn.addEventListener('click', function() {
+            if (!modifiedPdfBytes) {
+                showError('No modified PDF to download.');
                 return;
             }
             
+            const fileName = pdfFile.name.replace('.pdf', '') + '_numbered.pdf';
+            download(modifiedPdfBytes, fileName, 'application/pdf');
+            showSuccess('Download started!');
+        });
+
+        // Handle file selection
+        function handleFileSelection(file) {
             pdfFile = file;
-            optionsDiv.style.display = 'block';
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            
+            fileInfo.classList.add('active');
             addNumbersBtn.disabled = false;
-            showStatus(`PDF loaded: ${file.name}`, 'success');
+            successMessage.classList.remove('active');
+            errorMessage.classList.remove('active');
+            
+            // Read PDF to get page count
+            const fileReader = new FileReader();
+            fileReader.onload = async function() {
+                try {
+                    const pdfDoc = await PDFLib.PDFDocument.load(new Uint8Array(this.result));
+                    const pages = pdfDoc.getPageCount();
+                    pageCount.textContent = pages;
+                } catch (error) {
+                    console.error('Error reading PDF:', error);
+                }
+            };
+            fileReader.readAsArrayBuffer(file);
+            
+            updatePreview();
         }
 
-        // Add page numbers button click handler
-        addNumbersBtn.addEventListener('click', async function() {
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        // Update preview
+        function updatePreview() {
+            if (!pdfFile) return;
+            
+            const position = positionSelect.value;
+            const format = formatInput.value;
+            const customFormat = customFormatInput.value;
+            const fontSize = parseInt(fontSizeInput.value);
+            const startNumber = parseInt(startNumberInput.value);
+            const color = colorInput.value;
+            
+            // Generate page number text
+            let pageText;
+            switch (format) {
+                case '1':
+                    pageText = `Page ${startNumber}`;
+                    break;
+                case '2':
+                    pageText = `${startNumber}/10`;
+                    break;
+                case '3':
+                    pageText = `Page ${startNumber} of 10`;
+                    break;
+                case '4':
+                    pageText = `- ${startNumber} -`;
+                    break;
+                case 'custom':
+                    pageText = customFormat
+                        .replace('{page}', startNumber)
+                        .replace('{total}', '10');
+                    break;
+            }
+            
+            // Update preview text
+            pageNumberPreview.textContent = pageText;
+            pageNumberPreview.style.fontSize = `${fontSize}px`;
+            pageNumberPreview.style.color = color;
+            
+            // Position the preview
+            const previewWidth = previewPage.offsetWidth;
+            const previewHeight = previewPage.offsetHeight;
+            
+            switch (position) {
+                case 'bottom-center':
+                    pageNumberPreview.style.bottom = '10px';
+                    pageNumberPreview.style.left = '50%';
+                    pageNumberPreview.style.transform = 'translateX(-50%)';
+                    break;
+                case 'bottom-right':
+                    pageNumberPreview.style.bottom = '10px';
+                    pageNumberPreview.style.right = '10px';
+                    pageNumberPreview.style.transform = 'none';
+                    break;
+                case 'bottom-left':
+                    pageNumberPreview.style.bottom = '10px';
+                    pageNumberPreview.style.left = '10px';
+                    pageNumberPreview.style.transform = 'none';
+                    break;
+                case 'top-center':
+                    pageNumberPreview.style.top = '10px';
+                    pageNumberPreview.style.left = '50%';
+                    pageNumberPreview.style.transform = 'translateX(-50%)';
+                    break;
+                case 'top-right':
+                    pageNumberPreview.style.top = '10px';
+                    pageNumberPreview.style.right = '10px';
+                    pageNumberPreview.style.transform = 'none';
+                    break;
+                case 'top-left':
+                    pageNumberPreview.style.top = '10px';
+                    pageNumberPreview.style.left = '10px';
+                    pageNumberPreview.style.transform = 'none';
+                    break;
+            }
+        }
+
+        // Add page numbers to PDF
+        async function addPageNumbers() {
             if (!pdfFile) {
-                showStatus('No PDF file selected.', 'error');
+                showError('No PDF file selected.');
                 return;
             }
             
             try {
                 addNumbersBtn.disabled = true;
+                loading.style.display = 'block';
                 progressContainer.style.display = 'block';
                 progressBar.style.width = '0%';
-                
-                showStatus('Adding page numbers...', 'success');
+                successMessage.classList.remove('active');
+                errorMessage.classList.remove('active');
                 
                 // Read the PDF file
                 const arrayBuffer = await readFileAsArrayBuffer(pdfFile);
@@ -282,12 +908,12 @@
                 const totalPages = pages.length;
                 
                 // Get user options
-                const position = document.getElementById('position').value;
-                const format = document.getElementById('format').value;
-                const customFormat = document.getElementById('customFormat').value;
-                const fontSize = parseInt(document.getElementById('fontSize').value);
-                const startNumber = parseInt(document.getElementById('startNumber').value);
-                const color = document.getElementById('color').value;
+                const position = positionSelect.value;
+                const format = formatInput.value;
+                const customFormat = customFormatInput.value;
+                const fontSize = parseInt(fontSizeInput.value);
+                const startNumber = parseInt(startNumberInput.value);
+                const color = colorInput.value;
                 
                 // Convert hex color to RGB
                 const rgbColor = hexToRgb(color);
@@ -356,7 +982,6 @@
                         y,
                         size: fontSize,
                         color: PDFLib.rgb(rgbColor.r / 255, rgbColor.g / 255, rgbColor.b / 255),
-                        opacity: 1,
                     });
                     
                     // Update progress
@@ -366,27 +991,16 @@
                 // Save the modified PDF
                 modifiedPdfBytes = await pdfDoc.save();
                 
-                showStatus('Page numbers added successfully!', 'success');
+                showSuccess('Page numbers added successfully!');
                 downloadBtn.disabled = false;
             } catch (error) {
                 console.error('Error:', error);
-                showStatus('Failed to add page numbers: ' + error.message, 'error');
+                showError('Failed to add page numbers: ' + error.message);
             } finally {
                 addNumbersBtn.disabled = false;
+                loading.style.display = 'none';
             }
-        });
-
-        // Download button click handler
-        downloadBtn.addEventListener('click', function() {
-            if (!modifiedPdfBytes) {
-                showStatus('No modified PDF to download.', 'error');
-                return;
-            }
-            
-            const fileName = pdfFile.name.replace('.pdf', '') + '_numbered.pdf';
-            download(modifiedPdfBytes, fileName, 'application/pdf');
-            showStatus('Download started!', 'success');
-        });
+        }
 
         // Helper function to read file as ArrayBuffer
         function readFileAsArrayBuffer(file) {
@@ -408,17 +1022,27 @@
             } : { r: 0, g: 0, b: 0 };
         }
 
-        // Show status message
-        function showStatus(message, type) {
-            statusDiv.textContent = message;
-            statusDiv.className = 'status ' + type;
-            statusDiv.style.display = 'block';
-        }
-
         // Update progress bar
         function updateProgress(percent) {
             progressBar.style.width = percent + '%';
         }
+
+        // Show success message
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.classList.add('active');
+            errorMessage.classList.remove('active');
+        }
+
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('active');
+            successMessage.classList.remove('active');
+        }
+
+        // Initialize preview
+        updatePreview();
     </script>
 </body>
 </html>

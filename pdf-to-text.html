@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Page Reorder | Rearrange PDF Pages | devwhim.xyz</title>
-    <meta name="description" content="Free online PDF page reordering tool. Rearrange, sort, and reorganize pages in your PDF files quickly and securely. No uploads required - works entirely in your browser.">
-    <meta name="keywords" content="PDF page reorder, rearrange PDF pages, sort PDF pages, PDF organizer, PDF tools, devwhim">
+    <title>PDF to Text Converter | Extract Text from PDF | devwhim.xyz</title>
+    <meta name="description" content="Free online PDF to text converter. Extract text from your PDF files quickly and securely. No uploads required - works entirely in your browser.">
+    <meta name="keywords" content="PDF to text, extract text from PDF, PDF text converter, convert PDF to text, pdf tools, devwhim">
     <meta name="author" content="devwhim.xyz">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -191,83 +190,37 @@
             color: var(--primary);
         }
 
-        .page-list {
-            list-style-type: none;
-            margin-top: 1rem;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 10px;
-        }
-
-        .page-item {
+        .result-section {
             display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            cursor: move;
-            transition: var(--transition);
+            flex-direction: column;
+            height: 100%;
         }
 
-        .page-item:hover {
-            background-color: #f0f4ff;
-            border-color: var(--primary);
-        }
-
-        .page-item.sortable-chosen {
-            background-color: #e0e7ff;
-        }
-
-        .page-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 50%;
-            font-weight: 600;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .page-content {
-            flex: 1;
+        .result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 1rem;
         }
 
-        .page-title {
-            font-weight: 500;
+        .text-output {
+            flex: 1;
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: white;
+            resize: none;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            overflow-y: auto;
+            min-height: 300px;
         }
 
-        .page-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            padding: 5px;
-            border-radius: 4px;
-            transition: var(--transition);
-        }
-
-        .action-btn:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .delete-btn {
-            color: #ef4444;
+        .text-output:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
         }
 
         .features {
@@ -407,41 +360,18 @@
             display: block;
         }
 
-        .tool-actions {
+        .stats {
             display: flex;
             gap: 1rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray);
         }
 
-        .action-buttons {
+        .stat-item {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .reverse-btn {
-            background-color: #8b5cf6;
-        }
-
-        .reverse-btn:hover {
-            background-color: #7c3aed;
-        }
-
-        .shuffle-btn {
-            background-color: #f59e0b;
-        }
-
-        .shuffle-btn:hover {
-            background-color: #d97706;
-        }
-
-        .reset-btn {
-            background-color: #ef4444;
-        }
-
-        .reset-btn:hover {
-            background-color: #dc2626;
+            align-items: center;
+            gap: 0.5rem;
         }
     </style>
 </head>
@@ -449,9 +379,9 @@
     <header>
         <div class="container">
             <div class="logo">
-                <span>🔄</span> PDF Page Reorder
+                <span>📄</span> PDF to Text Converter
             </div>
-            <p>Rearrange, sort, and reorganize pages in your PDF files quickly and securely. No uploads required - works entirely in your browser.</p>
+            <p>Extract text from your PDF files quickly and securely. No uploads required - works entirely in your browser.</p>
         </div>
     </header>
 
@@ -468,8 +398,10 @@
                 </div>
                 <div class="file-info" id="fileInfo">
                     <p>File: <span class="file-name" id="fileName"></span></p>
-                    <p>Pages: <span id="pageCount"></span></p>
+                    <p>Size: <span id="fileSize"></span></p>
                 </div>
+                
+                <button class="btn btn-full" onclick="extractText()" id="extractBtn" disabled>Extract Text from PDF</button>
                 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
@@ -477,7 +409,7 @@
                 </div>
                 
                 <div class="success-message" id="successMessage">
-                    PDF successfully processed! You can now reorder the pages.
+                    Text successfully extracted! You can now copy it below.
                 </div>
                 
                 <div class="error-message" id="errorMessage">
@@ -486,27 +418,26 @@
             </div>
             
             <div class="tool-card">
-                <h2><span>📄</span> Page Order</h2>
-                <p>Drag and drop pages to reorder them. The new order will be applied when you download.</p>
-                
-                <div id="pageListContainer" style="display: none;">
-                    <ul id="pageList" class="page-list">
-                        <!-- Pages will be added here dynamically -->
-                    </ul>
-                    
-                    <div class="tool-actions">
-                        <button class="btn btn-secondary" id="reverseBtn">Reverse Order</button>
-                        <button class="btn shuffle-btn" id="shuffleBtn">Shuffle Pages</button>
-                        <button class="btn reset-btn" id="resetBtn">Reset Order</button>
+                <div class="result-section">
+                    <div class="result-header">
+                        <h2><span>📝</span> Extracted Text</h2>
+                        <button class="btn btn-secondary" id="copyBtn" disabled>Copy Text</button>
                     </div>
-                    
-                    <button class="btn btn-full" id="downloadBtn" style="margin-top: 1.5rem;" disabled>Download Reordered PDF</button>
-                </div>
-                
-                <div id="emptyState" style="text-align: center; padding: 2rem; color: var(--gray);">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
-                    <h3>No PDF Loaded</h3>
-                    <p>Upload a PDF file to start reordering pages</p>
+                    <textarea class="text-output" id="textOutput" readonly placeholder="Extracted text will appear here..."></textarea>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span>Pages:</span>
+                            <span id="pageCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Characters:</span>
+                            <span id="charCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Words:</span>
+                            <span id="wordCount">0</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -515,7 +446,7 @@
             <div class="feature-card">
                 <div class="feature-icon">🚀</div>
                 <h3>Fast Processing</h3>
-                <p>Reorder pages in your PDF in seconds with our optimized processing engine.</p>
+                <p>Extract text from your PDF in seconds with our optimized processing engine.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🔒</div>
@@ -525,7 +456,7 @@
             <div class="feature-card">
                 <div class="feature-icon">💯</div>
                 <h3>Free to Use</h3>
-                <p>No registration, no watermarks, no limitations. Reorder as many PDFs as you need.</p>
+                <p>No registration, no watermarks, no limitations. Convert as many PDFs as you need.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📱</div>
@@ -553,26 +484,27 @@
     </footer>
 
     <script>
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+        
         document.addEventListener('DOMContentLoaded', function() {
             const fileInput = document.getElementById('fileInput');
             const uploadBtn = document.getElementById('uploadBtn');
             const dropArea = document.getElementById('dropArea');
             const fileInfo = document.getElementById('fileInfo');
             const fileName = document.getElementById('fileName');
-            const pageCount = document.getElementById('pageCount');
+            const fileSize = document.getElementById('fileSize');
+            const extractBtn = document.getElementById('extractBtn');
             const loading = document.getElementById('loading');
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
-            const pageListContainer = document.getElementById('pageListContainer');
-            const pageList = document.getElementById('pageList');
-            const emptyState = document.getElementById('emptyState');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const reverseBtn = document.getElementById('reverseBtn');
-            const shuffleBtn = document.getElementById('shuffleBtn');
-            const resetBtn = document.getElementById('resetBtn');
+            const textOutput = document.getElementById('textOutput');
+            const copyBtn = document.getElementById('copyBtn');
+            const pageCount = document.getElementById('pageCount');
+            const charCount = document.getElementById('charCount');
+            const wordCount = document.getElementById('wordCount');
             
-            let pdfDoc = null;
-            let originalOrder = [];
+            let currentFile = null;
             
             // Browse button click
             uploadBtn.addEventListener('click', function() {
@@ -615,168 +547,115 @@
             
             // Handle file selection
             function handleFileSelection(file) {
+                currentFile = file;
                 fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
                 
-                loading.style.display = 'block';
+                fileInfo.classList.add('active');
+                extractBtn.disabled = false;
                 successMessage.classList.remove('active');
                 errorMessage.classList.remove('active');
+                textOutput.value = '';
+                resetStats();
+            }
+            
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' bytes';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' KB';
+                else return (bytes / 1048576).toFixed(2) + ' MB';
+            }
+            
+            // Extract text from PDF
+            function extractText() {
+                if (!currentFile) {
+                    showError('Please select a PDF file first.');
+                    return;
+                }
+                
+                loading.style.display = 'block';
+                extractBtn.disabled = true;
+                successMessage.classList.remove('active');
+                errorMessage.classList.remove('active');
+                textOutput.value = '';
+                resetStats();
                 
                 const fileReader = new FileReader();
-                fileReader.onload = async function() {
-                    try {
-                        const arrayBuffer = this.result;
-                        pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                
+                fileReader.onload = function() {
+                    const typedArray = new Uint8Array(this.result);
+                    
+                    pdfjsLib.getDocument(typedArray).promise.then(function(pdf) {
+                        const totalPages = pdf.numPages;
+                        let extractedText = '';
+                        let pagesProcessed = 0;
                         
-                        const pages = pdfDoc.getPageCount();
-                        pageCount.textContent = pages;
+                        pageCount.textContent = totalPages;
                         
-                        fileInfo.classList.add('active');
-                        loading.style.display = 'none';
-                        successMessage.classList.add('active');
-                        
-                        // Initialize page list
-                        initializePageList(pages);
-                        
-                    } catch (error) {
-                        console.error('Error loading PDF:', error);
-                        loading.style.display = 'none';
-                        showError('Error loading PDF file. Please try another file.');
-                    }
-                };
-                fileReader.readAsArrayBuffer(file);
-            }
-            
-            // Initialize page list with draggable items
-            function initializePageList(pageCount) {
-                pageList.innerHTML = '';
-                originalOrder = [];
-                
-                for (let i = 0; i < pageCount; i++) {
-                    originalOrder.push(i);
-                    addPageToList(i);
-                }
-                
-                // Initialize Sortable
-                new Sortable(pageList, {
-                    animation: 150,
-                    ghostClass: 'sortable-chosen',
-                    onEnd: function() {
-                        updateDownloadButton();
-                    }
-                });
-                
-                // Show page list and hide empty state
-                pageListContainer.style.display = 'block';
-                emptyState.style.display = 'none';
-                
-                updateDownloadButton();
-            }
-            
-            // Add a page to the list
-            function addPageToList(index) {
-                const pageItem = document.createElement('li');
-                pageItem.className = 'page-item';
-                pageItem.dataset.index = index;
-                
-                pageItem.innerHTML = `
-                    <div class="page-number">${index + 1}</div>
-                    <div class="page-content">
-                        <div class="page-title">Page ${index + 1}</div>
-                        <div class="page-actions">
-                            <button class="action-btn delete-btn" title="Remove page">🗑️</button>
-                        </div>
-                    </div>
-                `;
-                
-                pageList.appendChild(pageItem);
-                
-                // Add delete functionality
-                pageItem.querySelector('.delete-btn').addEventListener('click', function() {
-                    if (pageList.children.length > 1) {
-                        if (confirm('Are you sure you want to remove this page from the reordered PDF?')) {
-                            pageItem.remove();
-                            updateDownloadButton();
+                        for (let i = 1; i <= totalPages; i++) {
+                            pdf.getPage(i).then(function(page) {
+                                return page.getTextContent();
+                            }).then(function(textContent) {
+                                pagesProcessed++;
+                                extractedText += textContent.items.map(item => item.str).join(' ') + '\n\n';
+                                
+                                if (pagesProcessed === totalPages) {
+                                    loading.style.display = 'none';
+                                    extractBtn.disabled = false;
+                                    textOutput.value = extractedText.trim();
+                                    updateStats(extractedText);
+                                    successMessage.classList.add('active');
+                                    copyBtn.disabled = false;
+                                    
+                                    // Scroll to results
+                                    textOutput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                                }
+                            }).catch(function(err) {
+                                loading.style.display = 'none';
+                                extractBtn.disabled = false;
+                                showError('Error processing PDF page: ' + err.message);
+                            });
                         }
-                    } else {
-                        alert('You cannot remove the only page in the PDF.');
-                    }
-                });
+                    }).catch(function(err) {
+                        loading.style.display = 'none';
+                        extractBtn.disabled = false;
+                        showError('Error loading PDF: ' + err.message);
+                    });
+                };
+                
+                fileReader.readAsArrayBuffer(currentFile);
             }
             
-            // Update download button state
-            function updateDownloadButton() {
-                downloadBtn.disabled = pageList.children.length === 0;
+            // Update text statistics
+            function updateStats(text) {
+                const chars = text.length;
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                
+                charCount.textContent = chars.toLocaleString();
+                wordCount.textContent = words.toLocaleString();
             }
             
-            // Reverse page order
-            reverseBtn.addEventListener('click', function() {
-                const items = Array.from(pageList.children);
-                pageList.innerHTML = '';
-                items.reverse().forEach(item => pageList.appendChild(item));
-                updateDownloadButton();
-            });
+            // Reset statistics
+            function resetStats() {
+                pageCount.textContent = '0';
+                charCount.textContent = '0';
+                wordCount.textContent = '0';
+                copyBtn.disabled = true;
+            }
             
-            // Shuffle pages
-            shuffleBtn.addEventListener('click', function() {
-                const items = Array.from(pageList.children);
+            // Copy text to clipboard
+            copyBtn.addEventListener('click', function() {
+                if (!textOutput.value) return;
                 
-                // Fisher-Yates shuffle algorithm
-                for (let i = items.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    pageList.insertBefore(items[j], items[i]);
-                }
+                textOutput.select();
+                document.execCommand('copy');
                 
-                updateDownloadButton();
-            });
-            
-            // Reset to original order
-            resetBtn.addEventListener('click', function() {
-                if (pdfDoc) {
-                    initializePageList(pdfDoc.getPageCount());
-                }
-            });
-            
-            // Download reordered PDF
-            downloadBtn.addEventListener('click', async function() {
-                if (!pdfDoc || pageList.children.length === 0) return;
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
                 
-                try {
-                    loading.style.display = 'block';
-                    
-                    // Create a new PDF with the reordered pages
-                    const newPdf = await PDFLib.PDFDocument.create();
-                    
-                    // Get the page indices in the new order
-                    const pageIndices = Array.from(pageList.children).map(item => parseInt(item.dataset.index));
-                    
-                    // Copy pages from original PDF in the new order
-                    const pages = await newPdf.copyPages(pdfDoc, pageIndices);
-                    pages.forEach(page => newPdf.addPage(page));
-                    
-                    // Save the new PDF
-                    const pdfBytes = await newPdf.save();
-                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                    
-                    // Generate filename
-                    let filename = 'reordered.pdf';
-                    if (fileInput.files.length) {
-                        const originalName = fileInput.files[0].name.replace('.pdf', '');
-                        filename = `${originalName}_reordered.pdf`;
-                    }
-                    
-                    // Download the file
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = filename;
-                    link.click();
-                    
-                    loading.style.display = 'none';
-                    
-                } catch (error) {
-                    console.error('Error creating reordered PDF:', error);
-                    loading.style.display = 'none';
-                    showError('Error creating reordered PDF. Please try again.');
-                }
+                setTimeout(function() {
+                    copyBtn.textContent = originalText;
+                }, 2000);
             });
             
             // Show error message
@@ -784,6 +663,9 @@
                 errorMessage.textContent = message;
                 errorMessage.classList.add('active');
             }
+            
+            // Make extractText function globally available
+            window.extractText = extractText;
         });
     </script>
 </body>

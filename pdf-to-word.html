@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Page Reorder | Rearrange PDF Pages | devwhim.xyz</title>
-    <meta name="description" content="Free online PDF page reordering tool. Rearrange, sort, and reorganize pages in your PDF files quickly and securely. No uploads required - works entirely in your browser.">
-    <meta name="keywords" content="PDF page reorder, rearrange PDF pages, sort PDF pages, PDF organizer, PDF tools, devwhim">
+    <title>PDF to Word Converter | Convert PDF to DOCX | devwhim.xyz</title>
+    <meta name="description" content="Free online PDF to Word converter. Convert your PDF files to editable Word documents quickly and securely. No uploads required - works entirely in your browser.">
+    <meta name="keywords" content="PDF to Word, convert PDF to DOC, PDF converter, online PDF to Word, PDF to DOCX, devwhim">
     <meta name="author" content="devwhim.xyz">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@7.8.2/build/index.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -123,7 +124,7 @@
             background-color: #f9fafb;
         }
 
-        .upload-area:hover {
+        .upload-area:hover, .upload-area.highlight {
             border-color: var(--primary);
             background-color: #f0f4ff;
         }
@@ -166,8 +167,27 @@
             background: #6511a0;
         }
 
+        .btn-success {
+            background: #10b981;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
         .btn-full {
             width: 100%;
+        }
+
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            background-color: #9ca3af;
+            transform: none;
         }
 
         .file-info {
@@ -191,83 +211,34 @@
             color: var(--primary);
         }
 
-        .page-list {
-            list-style-type: none;
-            margin-top: 1rem;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 10px;
-        }
-
-        .page-item {
+        .result-section {
             display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            cursor: move;
-            transition: var(--transition);
+            flex-direction: column;
+            height: 100%;
         }
 
-        .page-item:hover {
-            background-color: #f0f4ff;
-            border-color: var(--primary);
-        }
-
-        .page-item.sortable-chosen {
-            background-color: #e0e7ff;
-        }
-
-        .page-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            background-color: var(--primary);
-            color: white;
-            border-radius: 50%;
-            font-weight: 600;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .page-content {
-            flex: 1;
+        .result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 1rem;
         }
 
-        .page-title {
-            font-weight: 500;
+        .preview-area {
+            flex: 1;
+            width: 100%;
+            padding: 1.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background-color: white;
+            overflow-y: auto;
+            min-height: 300px;
+            max-height: 400px;
+            line-height: 1.5;
         }
 
-        .page-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            padding: 5px;
-            border-radius: 4px;
-            transition: var(--transition);
-        }
-
-        .action-btn:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .delete-btn {
-            color: #ef4444;
+        .preview-area p {
+            margin-bottom: 1rem;
         }
 
         .features {
@@ -381,6 +352,24 @@
             }
         }
 
+        .progress-container {
+            margin: 1rem 0;
+            display: none;
+        }
+
+        progress {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
         .success-message {
             background: #d1fae5;
             color: #065f46;
@@ -407,41 +396,40 @@
             display: block;
         }
 
-        .tool-actions {
+        .stats {
             display: flex;
             gap: 1rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray);
         }
 
-        .action-buttons {
+        .stat-item {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .reverse-btn {
-            background-color: #8b5cf6;
+        .conversion-info {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f0f4ff;
+            border-radius: 8px;
         }
 
-        .reverse-btn:hover {
-            background-color: #7c3aed;
+        .conversion-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 1rem;
         }
 
-        .shuffle-btn {
-            background-color: #f59e0b;
+        .conversion-info ul {
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .shuffle-btn:hover {
-            background-color: #d97706;
-        }
-
-        .reset-btn {
-            background-color: #ef4444;
-        }
-
-        .reset-btn:hover {
-            background-color: #dc2626;
+        .conversion-info li {
+            margin-bottom: 0.3rem;
         }
     </style>
 </head>
@@ -449,9 +437,9 @@
     <header>
         <div class="container">
             <div class="logo">
-                <span>🔄</span> PDF Page Reorder
+                <span>📄</span> PDF to Word Converter
             </div>
-            <p>Rearrange, sort, and reorganize pages in your PDF files quickly and securely. No uploads required - works entirely in your browser.</p>
+            <p>Convert your PDF files to editable Word documents quickly and securely. No uploads required - works entirely in your browser.</p>
         </div>
     </header>
 
@@ -468,16 +456,24 @@
                 </div>
                 <div class="file-info" id="fileInfo">
                     <p>File: <span class="file-name" id="fileName"></span></p>
-                    <p>Pages: <span id="pageCount"></span></p>
+                    <p>Size: <span id="fileSize"></span></p>
+                    <p>Pages: <span id="pageCount">0</span></p>
                 </div>
+                
+                <div class="progress-container" id="progressContainer">
+                    <progress id="progressBar" value="0" max="100"></progress>
+                    <div class="progress-text" id="progressText">Processing: 0%</div>
+                </div>
+                
+                <button class="btn btn-full" id="convertBtn" disabled>Convert to Word Document</button>
                 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
-                    <p>Processing your PDF...</p>
+                    <p>Creating your Word document...</p>
                 </div>
                 
                 <div class="success-message" id="successMessage">
-                    PDF successfully processed! You can now reorder the pages.
+                    Conversion completed successfully! Your Word document is ready for download.
                 </div>
                 
                 <div class="error-message" id="errorMessage">
@@ -486,27 +482,38 @@
             </div>
             
             <div class="tool-card">
-                <h2><span>📄</span> Page Order</h2>
-                <p>Drag and drop pages to reorder them. The new order will be applied when you download.</p>
-                
-                <div id="pageListContainer" style="display: none;">
-                    <ul id="pageList" class="page-list">
-                        <!-- Pages will be added here dynamically -->
-                    </ul>
-                    
-                    <div class="tool-actions">
-                        <button class="btn btn-secondary" id="reverseBtn">Reverse Order</button>
-                        <button class="btn shuffle-btn" id="shuffleBtn">Shuffle Pages</button>
-                        <button class="btn reset-btn" id="resetBtn">Reset Order</button>
+                <div class="result-section">
+                    <div class="result-header">
+                        <h2><span>📝</span> Preview</h2>
+                        <button class="btn btn-success" id="downloadBtn" disabled>Download DOCX</button>
                     </div>
-                    
-                    <button class="btn btn-full" id="downloadBtn" style="margin-top: 1.5rem;" disabled>Download Reordered PDF</button>
+                    <div class="preview-area" id="previewArea">
+                        <p>Your converted content will appear here...</p>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span>Pages:</span>
+                            <span id="previewPageCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Characters:</span>
+                            <span id="previewCharCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Words:</span>
+                            <span id="previewWordCount">0</span>
+                        </div>
+                    </div>
                 </div>
                 
-                <div id="emptyState" style="text-align: center; padding: 2rem; color: var(--gray);">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
-                    <h3>No PDF Loaded</h3>
-                    <p>Upload a PDF file to start reordering pages</p>
+                <div class="conversion-info">
+                    <h3>About PDF to Word Conversion</h3>
+                    <ul>
+                        <li>Text formatting is preserved when possible</li>
+                        <li>Images and complex layouts may not convert perfectly</li>
+                        <li>Scanned PDFs require OCR software for text extraction</li>
+                    </ul>
+                    <p><strong>Note:</strong> This converter extracts text content only. Complex formatting may not be preserved.</p>
                 </div>
             </div>
         </div>
@@ -514,8 +521,8 @@
         <div class="features">
             <div class="feature-card">
                 <div class="feature-icon">🚀</div>
-                <h3>Fast Processing</h3>
-                <p>Reorder pages in your PDF in seconds with our optimized processing engine.</p>
+                <h3>Fast Conversion</h3>
+                <p>Convert PDF to Word in seconds with our optimized processing engine.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🔒</div>
@@ -525,7 +532,7 @@
             <div class="feature-card">
                 <div class="feature-icon">💯</div>
                 <h3>Free to Use</h3>
-                <p>No registration, no watermarks, no limitations. Reorder as many PDFs as you need.</p>
+                <p>No registration, no watermarks, no limitations. Convert as many PDFs as you need.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📱</div>
@@ -553,26 +560,33 @@
     </footer>
 
     <script>
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+        
         document.addEventListener('DOMContentLoaded', function() {
             const fileInput = document.getElementById('fileInput');
             const uploadBtn = document.getElementById('uploadBtn');
             const dropArea = document.getElementById('dropArea');
             const fileInfo = document.getElementById('fileInfo');
             const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
             const pageCount = document.getElementById('pageCount');
+            const convertBtn = document.getElementById('convertBtn');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
             const loading = document.getElementById('loading');
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
-            const pageListContainer = document.getElementById('pageListContainer');
-            const pageList = document.getElementById('pageList');
-            const emptyState = document.getElementById('emptyState');
+            const previewArea = document.getElementById('previewArea');
             const downloadBtn = document.getElementById('downloadBtn');
-            const reverseBtn = document.getElementById('reverseBtn');
-            const shuffleBtn = document.getElementById('shuffleBtn');
-            const resetBtn = document.getElementById('resetBtn');
+            const previewPageCount = document.getElementById('previewPageCount');
+            const previewCharCount = document.getElementById('previewCharCount');
+            const previewWordCount = document.getElementById('previewWordCount');
             
-            let pdfDoc = null;
-            let originalOrder = [];
+            let currentFile = null;
+            let extractedText = '';
+            let docBlob = null;
             
             // Browse button click
             uploadBtn.addEventListener('click', function() {
@@ -589,23 +603,20 @@
             // Drag and drop functionality
             dropArea.addEventListener('dragover', function(e) {
                 e.preventDefault();
-                dropArea.style.borderColor = 'var(--primary)';
-                dropArea.style.backgroundColor = '#f0f4ff';
+                dropArea.classList.add('highlight');
             });
             
             dropArea.addEventListener('dragleave', function() {
-                dropArea.style.borderColor = '#d1d5db';
-                dropArea.style.backgroundColor = '#f9fafb';
+                dropArea.classList.remove('highlight');
             });
             
             dropArea.addEventListener('drop', function(e) {
                 e.preventDefault();
-                dropArea.style.borderColor = '#d1d5db';
-                dropArea.style.backgroundColor = '#f9fafb';
+                dropArea.classList.remove('highlight');
                 
                 if (e.dataTransfer.files.length > 0) {
                     const file = e.dataTransfer.files[0];
-                    if (file.type === 'application/pdf') {
+                    if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
                         handleFileSelection(file);
                     } else {
                         showError('Please upload a PDF file.');
@@ -615,169 +626,156 @@
             
             // Handle file selection
             function handleFileSelection(file) {
+                currentFile = file;
                 fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
                 
-                loading.style.display = 'block';
+                fileInfo.classList.add('active');
+                convertBtn.disabled = false;
                 successMessage.classList.remove('active');
                 errorMessage.classList.remove('active');
+                progressContainer.style.display = 'none';
+                previewArea.innerHTML = '<p>Your converted content will appear here...</p>';
+                downloadBtn.disabled = true;
+                resetStats();
                 
+                // Read PDF to get page count
                 const fileReader = new FileReader();
                 fileReader.onload = async function() {
                     try {
-                        const arrayBuffer = this.result;
-                        pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                        
-                        const pages = pdfDoc.getPageCount();
+                        const pdfDoc = await pdfjsLib.getDocument(new Uint8Array(this.result)).promise;
+                        const pages = pdfDoc.numPages;
                         pageCount.textContent = pages;
-                        
-                        fileInfo.classList.add('active');
-                        loading.style.display = 'none';
-                        successMessage.classList.add('active');
-                        
-                        // Initialize page list
-                        initializePageList(pages);
-                        
+                        previewPageCount.textContent = pages;
                     } catch (error) {
-                        console.error('Error loading PDF:', error);
-                        loading.style.display = 'none';
-                        showError('Error loading PDF file. Please try another file.');
+                        console.error('Error reading PDF:', error);
                     }
                 };
                 fileReader.readAsArrayBuffer(file);
             }
             
-            // Initialize page list with draggable items
-            function initializePageList(pageCount) {
-                pageList.innerHTML = '';
-                originalOrder = [];
-                
-                for (let i = 0; i < pageCount; i++) {
-                    originalOrder.push(i);
-                    addPageToList(i);
-                }
-                
-                // Initialize Sortable
-                new Sortable(pageList, {
-                    animation: 150,
-                    ghostClass: 'sortable-chosen',
-                    onEnd: function() {
-                        updateDownloadButton();
-                    }
-                });
-                
-                // Show page list and hide empty state
-                pageListContainer.style.display = 'block';
-                emptyState.style.display = 'none';
-                
-                updateDownloadButton();
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' bytes';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' KB';
+                else return (bytes / 1048576).toFixed(2) + ' MB';
             }
             
-            // Add a page to the list
-            function addPageToList(index) {
-                const pageItem = document.createElement('li');
-                pageItem.className = 'page-item';
-                pageItem.dataset.index = index;
-                
-                pageItem.innerHTML = `
-                    <div class="page-number">${index + 1}</div>
-                    <div class="page-content">
-                        <div class="page-title">Page ${index + 1}</div>
-                        <div class="page-actions">
-                            <button class="action-btn delete-btn" title="Remove page">🗑️</button>
-                        </div>
-                    </div>
-                `;
-                
-                pageList.appendChild(pageItem);
-                
-                // Add delete functionality
-                pageItem.querySelector('.delete-btn').addEventListener('click', function() {
-                    if (pageList.children.length > 1) {
-                        if (confirm('Are you sure you want to remove this page from the reordered PDF?')) {
-                            pageItem.remove();
-                            updateDownloadButton();
-                        }
-                    } else {
-                        alert('You cannot remove the only page in the PDF.');
-                    }
-                });
-            }
-            
-            // Update download button state
-            function updateDownloadButton() {
-                downloadBtn.disabled = pageList.children.length === 0;
-            }
-            
-            // Reverse page order
-            reverseBtn.addEventListener('click', function() {
-                const items = Array.from(pageList.children);
-                pageList.innerHTML = '';
-                items.reverse().forEach(item => pageList.appendChild(item));
-                updateDownloadButton();
-            });
-            
-            // Shuffle pages
-            shuffleBtn.addEventListener('click', function() {
-                const items = Array.from(pageList.children);
-                
-                // Fisher-Yates shuffle algorithm
-                for (let i = items.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    pageList.insertBefore(items[j], items[i]);
+            // Convert PDF to Word
+            convertBtn.addEventListener('click', async function() {
+                if (!currentFile) {
+                    showError('Please select a PDF file first.');
+                    return;
                 }
                 
-                updateDownloadButton();
-            });
-            
-            // Reset to original order
-            resetBtn.addEventListener('click', function() {
-                if (pdfDoc) {
-                    initializePageList(pdfDoc.getPageCount());
-                }
-            });
-            
-            // Download reordered PDF
-            downloadBtn.addEventListener('click', async function() {
-                if (!pdfDoc || pageList.children.length === 0) return;
+                loading.style.display = 'block';
+                progressContainer.style.display = 'block';
+                convertBtn.disabled = true;
+                successMessage.classList.remove('active');
+                errorMessage.classList.remove('active');
+                previewArea.innerHTML = '';
+                downloadBtn.disabled = true;
                 
                 try {
-                    loading.style.display = 'block';
+                    const arrayBuffer = await readFileAsArrayBuffer(currentFile);
+                    const pdfDoc = await pdfjsLib.getDocument(arrayBuffer).promise;
+                    const totalPages = pdfDoc.numPages;
                     
-                    // Create a new PDF with the reordered pages
-                    const newPdf = await PDFLib.PDFDocument.create();
+                    extractedText = '';
                     
-                    // Get the page indices in the new order
-                    const pageIndices = Array.from(pageList.children).map(item => parseInt(item.dataset.index));
-                    
-                    // Copy pages from original PDF in the new order
-                    const pages = await newPdf.copyPages(pdfDoc, pageIndices);
-                    pages.forEach(page => newPdf.addPage(page));
-                    
-                    // Save the new PDF
-                    const pdfBytes = await newPdf.save();
-                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                    
-                    // Generate filename
-                    let filename = 'reordered.pdf';
-                    if (fileInput.files.length) {
-                        const originalName = fileInput.files[0].name.replace('.pdf', '');
-                        filename = `${originalName}_reordered.pdf`;
+                    for (let i = 1; i <= totalPages; i++) {
+                        const page = await pdfDoc.getPage(i);
+                        const textContent = await page.getTextContent();
+                        const pageText = textContent.items.map(item => item.str).join(' ');
+                        extractedText += pageText + '\n\n';
+                        
+                        // Update progress
+                        const progress = Math.round((i / totalPages) * 100);
+                        progressBar.value = progress;
+                        progressText.textContent = `Processing page ${i} of ${totalPages} (${progress}%)`;
+                        
+                        // Update preview with first few pages
+                        if (i <= 3) {
+                            const pagePreview = document.createElement('p');
+                            pagePreview.innerHTML = `<strong>Page ${i}:</strong> ${pageText.substring(0, 300)}${pageText.length > 300 ? '...' : ''}`;
+                            previewArea.appendChild(pagePreview);
+                        }
                     }
                     
-                    // Download the file
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = filename;
-                    link.click();
+                    // Create Word document
+                    await createWordDocument(extractedText, currentFile.name);
                     
                     loading.style.display = 'none';
+                    progressContainer.style.display = 'none';
+                    successMessage.classList.add('active');
+                    downloadBtn.disabled = false;
+                    
+                    // Update stats
+                    updateStats(extractedText);
                     
                 } catch (error) {
-                    console.error('Error creating reordered PDF:', error);
+                    console.error('Conversion error:', error);
                     loading.style.display = 'none';
-                    showError('Error creating reordered PDF. Please try again.');
+                    progressContainer.style.display = 'none';
+                    convertBtn.disabled = false;
+                    showError('Error processing PDF: ' + error.message);
                 }
             });
+            
+            // Read file as ArrayBuffer
+            function readFileAsArrayBuffer(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+            
+            // Create Word document
+            async function createWordDocument(text, originalFilename) {
+                const paragraphs = text.split('\n\n').filter(p => p.trim().length > 0);
+                
+                const docContent = paragraphs.map(para => 
+                    new docx.Paragraph({
+                        children: [new docx.TextRun(para)],
+                        spacing: { after: 200 }
+                    })
+                );
+                
+                const doc = new docx.Document({
+                    sections: [{
+                        properties: {},
+                        children: docContent
+                    }]
+                });
+                
+                docBlob = await docx.Packer.toBlob(doc);
+            }
+            
+            // Download Word document
+            downloadBtn.addEventListener('click', function() {
+                if (!docBlob) return;
+                
+                const filename = currentFile.name.replace(/\.pdf$/i, '') + '.docx';
+                saveAs(docBlob, filename);
+            });
+            
+            // Update text statistics
+            function updateStats(text) {
+                const chars = text.length;
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                
+                previewCharCount.textContent = chars.toLocaleString();
+                previewWordCount.textContent = words.toLocaleString();
+            }
+            
+            // Reset statistics
+            function resetStats() {
+                previewPageCount.textContent = '0';
+                previewCharCount.textContent = '0';
+                previewWordCount.textContent = '0';
+            }
             
             // Show error message
             function showError(message) {

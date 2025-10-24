@@ -2,465 +2,929 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PDF Page Deleter - Remove Pages from PDF Online for Free</title>
-    <meta name="description" content="Free online tool to delete pages from PDF files. Select and remove unwanted pages from your PDF documents quickly and easily.">
-    <meta name="keywords" content="PDF page deleter, remove PDF pages, delete PDF pages, PDF editor, PDF tool, online PDF editor, PDF page remover, extract PDF pages, modify PDF">
-    <meta name="author" content="PDF Tools">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="PDF Page Deleter - Remove Pages from PDF Online for Free">
-    <meta property="og:description" content="Free online tool to delete pages from PDF files. Select and remove unwanted pages from your PDF documents quickly and easily.">
-    <meta property="og:type" content="website">
-    <link rel="canonical" href="https://yourwebsite.com/pdf-page-deleter">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Page Deleter | Remove Pages from PDF | devwhim.xyz</title>
+    <meta name="description" content="Free online PDF page deleter. Remove unwanted pages from your PDF documents quickly and securely. No uploads required - works entirely in your browser.">
+    <meta name="keywords" content="PDF page deleter, remove PDF pages, delete PDF pages, PDF editor, PDF tool, online PDF editor, PDF page remover, extract PDF pages, modify PDF, devwhim">
+    <meta name="author" content="devwhim.xyz">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://unpkg.com/downloadjs@1.4.7"></script>
     <style>
-        * {
-            box-sizing: border-box;
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --danger: #ef4444;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --transition: all 0.3s ease;
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.5;
+
+        * {
             margin: 0;
             padding: 0;
-            color: #333;
-            background-color: #f5f5f5;
-            -webkit-text-size-adjust: 100%;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7ff;
+            padding: 0;
+            margin: 0;
+        }
+
         .container {
-            max-width: 100%;
-            padding: 15px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
         }
-        h1 {
-            color: #2c3e50;
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
             text-align: center;
-            font-size: 1.5rem;
-            margin: 0 0 15px 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
         }
-        .upload-section {
-            border: 2px dashed #3498db;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            background-color: #ecf0f1;
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-        .preview-section {
-            display: none;
-            margin-top: 15px;
+
+        .logo span {
+            color: var(--success);
         }
-        .page-thumbnail {
-            display: inline-block;
-            margin: 5px;
-            position: relative;
-            border: 2px solid #ddd;
-            border-radius: 4px;
-            overflow: hidden;
-            width: calc(50% - 10px);
-            max-width: 200px;
+
+        header p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
         }
-        @media (min-width: 600px) {
-            .page-thumbnail {
-                width: calc(33.333% - 10px);
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
             }
         }
-        .page-thumbnail.selected {
-            border-color: #e74c3c;
+
+        .tool-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
-        .page-checkbox {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            transform: scale(1.3);
-            accent-color: #e74c3c;
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
-        .page-number {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background-color: rgba(0,0,0,0.7);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 12px;
+
+        .tool-card h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .button {
-            background-color: #3498db;
+
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: #f9fafb;
+        }
+
+        .upload-area:hover, .upload-area.highlight {
+            border-color: var(--primary);
+            background-color: #f0f4ff;
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .upload-area p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 10px 15px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 5px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            width: calc(50% - 10px);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            transition: var(--transition);
+            text-align: center;
+            font-size: 1rem;
         }
-        .button:hover {
-            background-color: #2980b9;
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
         }
-        .button.delete {
-            background-color: #e74c3c;
+
+        .btn-secondary {
+            background: var(--secondary);
         }
-        .button.delete:hover {
-            background-color: #c0392b;
+
+        .btn-secondary:hover {
+            background: #6511a0;
         }
-        .button.download {
-            background-color: #27ae60;
+
+        .btn-success {
+            background: #10b981;
         }
-        .button.download:hover {
-            background-color: #219653;
+
+        .btn-success:hover {
+            background: #059669;
         }
-        .button.secondary {
-            background-color: #7f8c8d;
+
+        .btn-danger {
+            background: var(--danger);
         }
-        .button.secondary:hover {
-            background-color: #95a5a6;
+
+        .btn-danger:hover {
+            background: #dc2626;
         }
-        .button-group {
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn:disabled:hover {
+            background-color: #9ca3af;
+            transform: none;
+        }
+
+        .file-info {
+            background: #f0f4ff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .file-info.active {
+            display: block;
+        }
+
+        .file-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .preview-section {
             display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .page-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .page-thumbnail {
+            position: relative;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .page-thumbnail:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-thumbnail.selected {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+        }
+
+        .page-thumbnail canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .page-number {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .page-checkbox {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            transform: scale(1.3);
+            accent-color: var(--danger);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             flex-wrap: wrap;
-            justify-content: center;
-            margin: 10px -5px;
+            gap: 1rem;
         }
-        .status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 14px;
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
         }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
         }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
         }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            margin-top: 1.5rem;
+            width: 100%;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-links {
+                justify-content: center;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+        }
+
         .loading {
             display: none;
             text-align: center;
-            margin: 15px 0;
+            margin: 1rem 0;
         }
+
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary);
             border-radius: 50%;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
+            margin: 0 auto 1rem;
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
         }
-        .file-input-button {
-            width: 100%;
-            padding: 10px 15px;
+
+        .success-message.active {
+            display: block;
         }
-        #pdfInput {
-            position: absolute;
-            font-size: 100px;
-            opacity: 0;
-            right: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
         }
-        .instructions {
-            font-size: 14px;
-            color: #7f8c8d;
-            margin-top: 10px;
+
+        .error-message.active {
+            display: block;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .selection-info {
+            background: #f0f4ff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .selection-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .selection-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .selection-btn {
+            background: #e5e7eb;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .selection-btn:hover {
+            background: #d1d5db;
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <span>✂️</span> PDF Page Deleter
+            </div>
+            <p>Remove unwanted pages from your PDF documents quickly and securely. No uploads required - works entirely in your browser.</p>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>PDF Page Deleter</h1>
-        
-        <div class="upload-section">
-            <h2 style="font-size: 1.2rem; margin: 0 0 10px 0;">Upload PDF</h2>
-            <div class="file-input-wrapper">
-                <button class="button file-input-button">Choose PDF File</button>
-                <input type="file" id="pdfInput" accept=".pdf">
+        <div class="main-content">
+            <div class="tool-card">
+                <h2><span>📤</span> Upload PDF</h2>
+                <div class="upload-area" id="dropArea">
+                    <i>📄</i>
+                    <p>Drag & drop your PDF file here</p>
+                    <p>or</p>
+                    <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                    <button class="btn" id="uploadBtn">Choose PDF File</button>
+                </div>
+                <div class="file-info" id="fileInfo">
+                    <p>File: <span class="file-name" id="fileName"></span></p>
+                    <p>Size: <span id="fileSize"></span></p>
+                    <p>Pages: <span id="pageCount">0</span></p>
+                </div>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Loading your PDF...</p>
+                </div>
+                
+                <div class="success-message" id="successMessage">
+                    PDF loaded successfully! Select pages to delete.
+                </div>
+                
+                <div class="error-message" id="errorMessage">
+                    Error loading PDF. Please try again with a different file.
+                </div>
             </div>
-            <p class="instructions">Or drag and drop PDF here</p>
-        </div>
-        
-        <div id="loading" class="loading">
-            <div class="spinner"></div>
-            <p>Processing...</p>
-        </div>
-        
-        <div id="previewSection" class="preview-section">
-            <h2 style="font-size: 1.2rem; margin: 0 0 10px 0;">Select Pages to Delete</h2>
-            <div id="pageThumbnails"></div>
             
-            <div class="button-group">
-                <button id="selectAllBtn" class="button secondary">Select All</button>
-                <button id="deselectAllBtn" class="button secondary">Deselect All</button>
-            </div>
-            
-            <div class="button-group">
-                <button id="deletePagesBtn" class="button delete">Delete Selected</button>
-                <button id="downloadBtn" class="button download" style="display: none;">Download PDF</button>
+            <div class="tool-card">
+                <div class="preview-section">
+                    <div class="preview-header">
+                        <h2><span>👁️</span> Page Preview</h2>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <span>Selected:</span>
+                                <span id="selectedCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="selection-info">
+                        <h3>Selection Controls</h3>
+                        <div class="selection-controls">
+                            <button class="selection-btn" id="selectAllBtn">Select All</button>
+                            <button class="selection-btn" id="deselectAllBtn">Deselect All</button>
+                            <button class="selection-btn" id="selectEvenBtn">Select Even</button>
+                            <button class="selection-btn" id="selectOddBtn">Select Odd</button>
+                        </div>
+                    </div>
+                    
+                    <div class="page-thumbnails" id="pageThumbnails">
+                        <!-- Page thumbnails will be inserted here -->
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="btn btn-danger btn-full" id="deletePagesBtn" disabled>Delete Selected Pages</button>
+                        <button class="btn btn-success btn-full" id="downloadBtn" disabled>Download Modified PDF</button>
+                    </div>
+                    
+                    <div class="success-message" id="deleteSuccessMessage">
+                        Pages deleted successfully! Ready to download.
+                    </div>
+                </div>
             </div>
         </div>
         
-        <div id="statusMessage" class="status" style="display: none;"></div>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Fast Processing</h3>
+                <p>Delete pages from your PDF in seconds with our optimized processing engine.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>100% Secure</h3>
+                <p>Your files never leave your device. No uploads, no servers, complete privacy.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💯</div>
+                <h3>Free to Use</h3>
+                <p>No registration, no watermarks, no limitations. Process as many PDFs as you need.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Works Everywhere</h3>
+                <p>Use on any device with a modern browser - desktop, tablet, or mobile.</p>
+            </div>
+        </div>
     </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">devwhim.xyz</div>
+                <div class="footer-links">
+                    <a href="#">Home</a>
+                    <a href="#">Tools</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="copyright">
+                    &copy; 2023 devwhim.xyz - Free online PDF tools
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // PDF.js worker path
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
         
-        let pdfDoc = null;
-        let selectedPages = [];
-        let pdfBytes = null;
-        
-        // File input handler
-        document.getElementById('pdfInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                loadPDF(file);
-            }
-        });
-        
-        // Drop zone handlers
-        const dropZone = document.querySelector('.upload-section');
-        dropZone.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            dropZone.style.backgroundColor = '#d6eaf8';
-        });
-        
-        dropZone.addEventListener('dragleave', function() {
-            dropZone.style.backgroundColor = '#ecf0f1';
-        });
-        
-        dropZone.addEventListener('drop', function(e) {
-            e.preventDefault();
-            dropZone.style.backgroundColor = '#ecf0f1';
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const fileInput = document.getElementById('fileInput');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const dropArea = document.getElementById('dropArea');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const pageCount = document.getElementById('pageCount');
+            const loading = document.getElementById('loading');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const pageThumbnails = document.getElementById('pageThumbnails');
+            const selectAllBtn = document.getElementById('selectAllBtn');
+            const deselectAllBtn = document.getElementById('deselectAllBtn');
+            const selectEvenBtn = document.getElementById('selectEvenBtn');
+            const selectOddBtn = document.getElementById('selectOddBtn');
+            const deletePagesBtn = document.getElementById('deletePagesBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const selectedCount = document.getElementById('selectedCount');
+            const deleteSuccessMessage = document.getElementById('deleteSuccessMessage');
             
-            const file = e.dataTransfer.files[0];
-            if (file && file.type === 'application/pdf') {
-                document.getElementById('pdfInput').files = e.dataTransfer.files;
-                loadPDF(file);
-            } else {
-                showStatus('Please upload a PDF file only', 'error');
-            }
-        });
-        
-        // Load PDF function
-        function loadPDF(file) {
-            showLoading(true);
-            const fileReader = new FileReader();
+            let pdfDoc = null;
+            let selectedPages = [];
+            let pdfBytes = null;
             
-            fileReader.onload = function() {
-                pdfBytes = new Uint8Array(this.result);
+            // Browse button click
+            uploadBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // File input change
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    handleFileSelection(e.target.files[0]);
+                }
+            });
+            
+            // Drag and drop functionality
+            dropArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                dropArea.classList.add('highlight');
+            });
+            
+            dropArea.addEventListener('dragleave', function() {
+                dropArea.classList.remove('highlight');
+            });
+            
+            dropArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                dropArea.classList.remove('highlight');
                 
-                // Load with PDF.js for display
-                pdfjsLib.getDocument({data: pdfBytes}).promise.then(function(pdf) {
-                    pdfDoc = pdf;
-                    selectedPages = Array(pdf.numPages).fill(false);
-                    showThumbnails();
-                    showLoading(false);
+                if (e.dataTransfer.files.length > 0) {
+                    const file = e.dataTransfer.files[0];
+                    if (file.type === 'application/pdf') {
+                        handleFileSelection(file);
+                    } else {
+                        showError('Please upload a PDF file.');
+                    }
+                }
+            });
+            
+            // Handle file selection
+            function handleFileSelection(file) {
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                
+                fileInfo.classList.add('active');
+                loading.style.display = 'block';
+                successMessage.classList.remove('active');
+                errorMessage.classList.remove('active');
+                deleteSuccessMessage.classList.remove('active');
+                pageThumbnails.innerHTML = '';
+                deletePagesBtn.disabled = true;
+                downloadBtn.disabled = true;
+                
+                const fileReader = new FileReader();
+                
+                fileReader.onload = function() {
+                    pdfBytes = new Uint8Array(this.result);
+                    
+                    // Load with PDF.js for display
+                    pdfjsLib.getDocument({data: pdfBytes}).promise.then(function(pdf) {
+                        pdfDoc = pdf;
+                        selectedPages = Array(pdf.numPages).fill(false);
+                        pageCount.textContent = pdf.numPages;
+                        showThumbnails();
+                        loading.style.display = 'none';
+                        successMessage.classList.add('active');
+                    }).catch(function(error) {
+                        loading.style.display = 'none';
+                        showError('Error loading PDF: ' + error.message);
+                    });
+                };
+                
+                fileReader.onerror = function() {
+                    loading.style.display = 'none';
+                    showError('Error reading file');
+                };
+                
+                fileReader.readAsArrayBuffer(file);
+            }
+            
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' bytes';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' KB';
+                else return (bytes / 1048576).toFixed(2) + ' MB';
+            }
+            
+            // Show thumbnails
+            function showThumbnails() {
+                pageThumbnails.innerHTML = '';
+                
+                for (let i = 1; i <= pdfDoc.numPages; i++) {
+                    const pageThumbnail = document.createElement('div');
+                    pageThumbnail.className = 'page-thumbnail';
+                    pageThumbnail.id = 'page-' + i;
+                    
+                    const canvas = document.createElement('canvas');
+                    pageThumbnail.appendChild(canvas);
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'page-checkbox';
+                    checkbox.dataset.pageNum = i;
+                    pageThumbnail.appendChild(checkbox);
+                    
+                    const pageNumLabel = document.createElement('div');
+                    pageNumLabel.className = 'page-number';
+                    pageNumLabel.textContent = i;
+                    pageThumbnail.appendChild(pageNumLabel);
+                    
+                    pageThumbnails.appendChild(pageThumbnail);
+                    
+                    // Checkbox event listener
+                    checkbox.addEventListener('change', function() {
+                        const pageNum = parseInt(this.dataset.pageNum);
+                        selectedPages[pageNum - 1] = this.checked;
+                        updateThumbnailSelection(pageNum, this.checked);
+                        updateSelectedCount();
+                        updateDeleteButton();
+                    });
+                    
+                    // Render page thumbnail
+                    renderPageThumbnail(i, canvas);
+                }
+                
+                updateSelectedCount();
+                updateDeleteButton();
+            }
+            
+            // Render page thumbnail
+            function renderPageThumbnail(pageNum, canvas) {
+                pdfDoc.getPage(pageNum).then(function(page) {
+                    const viewport = page.getViewport({ scale: 0.3 });
+                    const context = canvas.getContext('2d');
+                    
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    });
                 }).catch(function(error) {
-                    showStatus('Error loading PDF: ' + error.message, 'error');
-                    showLoading(false);
+                    console.error('Error rendering page thumbnail:', error);
                 });
-            };
+            }
             
-            fileReader.onerror = function() {
-                showStatus('Error reading file', 'error');
-                showLoading(false);
-            };
+            // Update thumbnail selection style
+            function updateThumbnailSelection(pageNum, isSelected) {
+                const thumbnail = document.getElementById('page-' + pageNum);
+                if (isSelected) {
+                    thumbnail.classList.add('selected');
+                } else {
+                    thumbnail.classList.remove('selected');
+                }
+            }
             
-            fileReader.readAsArrayBuffer(file);
-        }
-        
-        // Show/hide loading spinner
-        function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-        }
-    
-        // Show thumbnails
-        function showThumbnails() {
-            const thumbnailsContainer = document.getElementById('pageThumbnails');
-            thumbnailsContainer.innerHTML = '';
+            // Update selected count
+            function updateSelectedCount() {
+                const count = selectedPages.filter(Boolean).length;
+                selectedCount.textContent = count;
+            }
             
-            for (let i = 1; i <= pdfDoc.numPages; i++) {
-                const pageThumbnail = document.createElement('div');
-                pageThumbnail.className = 'page-thumbnail';
-                pageThumbnail.id = 'page-' + i;
+            // Update delete button state
+            function updateDeleteButton() {
+                const hasSelected = selectedPages.some(Boolean);
+                const allSelected = selectedPages.every(Boolean);
                 
-                const canvas = document.createElement('canvas');
-                pageThumbnail.appendChild(canvas);
-                
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.className = 'page-checkbox';
-                checkbox.dataset.pageNum = i;
-                pageThumbnail.appendChild(checkbox);
-                
-                const pageNumLabel = document.createElement('div');
-                pageNumLabel.className = 'page-number';
-                pageNumLabel.textContent = i;
-                pageThumbnail.appendChild(pageNumLabel);
-                
-                thumbnailsContainer.appendChild(pageThumbnail);
-                
-                // Checkbox event listener
-                checkbox.addEventListener('change', function() {
-                    const pageNum = parseInt(this.dataset.pageNum);
-                    selectedPages[pageNum - 1] = this.checked;
-                    updateThumbnailSelection(pageNum, this.checked);
+                deletePagesBtn.disabled = !hasSelected || allSelected;
+            }
+            
+            // Selection controls
+            selectAllBtn.addEventListener('click', function() {
+                selectedPages = selectedPages.map(() => true);
+                document.querySelectorAll('.page-checkbox').forEach(checkbox => {
+                    checkbox.checked = true;
+                    const pageNum = parseInt(checkbox.dataset.pageNum);
+                    updateThumbnailSelection(pageNum, true);
                 });
-                
-                // Render page thumbnail
-                renderPageThumbnail(i, canvas);
-            }
+                updateSelectedCount();
+                updateDeleteButton();
+            });
             
-            document.getElementById('previewSection').style.display = 'block';
-            document.getElementById('downloadBtn').style.display = 'none';
-            showStatus('PDF loaded. Select pages to delete.', 'success');
-            
-            // Scroll to preview section
-            document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Render page thumbnail
-        function renderPageThumbnail(pageNum, canvas) {
-            pdfDoc.getPage(pageNum).then(function(page) {
-                const viewport = page.getViewport({ scale: 0.3 });
-                const context = canvas.getContext('2d');
-                
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                
-                page.render({
-                    canvasContext: context,
-                    viewport: viewport
+            deselectAllBtn.addEventListener('click', function() {
+                selectedPages = selectedPages.map(() => false);
+                document.querySelectorAll('.page-checkbox').forEach(checkbox => {
+                    checkbox.checked = false;
+                    const pageNum = parseInt(checkbox.dataset.pageNum);
+                    updateThumbnailSelection(pageNum, false);
                 });
-            }).catch(function(error) {
-                console.error('Error rendering page thumbnail:', error);
+                updateSelectedCount();
+                updateDeleteButton();
             });
-        }
-        
-        // Update thumbnail selection style
-        function updateThumbnailSelection(pageNum, isSelected) {
-            const thumbnail = document.getElementById('page-' + pageNum);
-            if (isSelected) {
-                thumbnail.classList.add('selected');
-            } else {
-                thumbnail.classList.remove('selected');
-            }
-        }
-        
-        // Select all button
-        document.getElementById('selectAllBtn').addEventListener('click', function() {
-            selectedPages = selectedPages.map(() => true);
-            document.querySelectorAll('.page-checkbox').forEach(checkbox => {
-                checkbox.checked = true;
-                const pageNum = parseInt(checkbox.dataset.pageNum);
-                updateThumbnailSelection(pageNum, true);
+            
+            selectEvenBtn.addEventListener('click', function() {
+                selectedPages = selectedPages.map((_, index) => (index + 1) % 2 === 0);
+                document.querySelectorAll('.page-checkbox').forEach(checkbox => {
+                    const pageNum = parseInt(checkbox.dataset.pageNum);
+                    checkbox.checked = selectedPages[pageNum - 1];
+                    updateThumbnailSelection(pageNum, selectedPages[pageNum - 1]);
+                });
+                updateSelectedCount();
+                updateDeleteButton();
             });
-        });
-        
-        // Deselect all button
-        document.getElementById('deselectAllBtn').addEventListener('click', function() {
-            selectedPages = selectedPages.map(() => false);
-            document.querySelectorAll('.page-checkbox').forEach(checkbox => {
-                checkbox.checked = false;
-                const pageNum = parseInt(checkbox.dataset.pageNum);
-                updateThumbnailSelection(pageNum, false);
+            
+            selectOddBtn.addEventListener('click', function() {
+                selectedPages = selectedPages.map((_, index) => (index + 1) % 2 === 1);
+                document.querySelectorAll('.page-checkbox').forEach(checkbox => {
+                    const pageNum = parseInt(checkbox.dataset.pageNum);
+                    checkbox.checked = selectedPages[pageNum - 1];
+                    updateThumbnailSelection(pageNum, selectedPages[pageNum - 1]);
+                });
+                updateSelectedCount();
+                updateDeleteButton();
             });
+            
+            // Delete pages button
+            deletePagesBtn.addEventListener('click', async function() {
+                const pagesToDelete = selectedPages.reduce((acc, val, idx) => {
+                    if (val) acc.push(idx + 1);
+                    return acc;
+                }, []);
+                
+                if (pagesToDelete.length === 0) {
+                    showError('Please select at least one page to delete');
+                    return;
+                }
+                
+                if (pagesToDelete.length === pdfDoc.numPages) {
+                    showError('Cannot delete all pages');
+                    return;
+                }
+                
+                loading.style.display = 'block';
+                try {
+                    await deleteSelectedPages(pagesToDelete);
+                    loading.style.display = 'none';
+                    deleteSuccessMessage.classList.add('active');
+                    downloadBtn.disabled = false;
+                    
+                    // Update UI to reflect changes
+                    selectedPages = selectedPages.map(() => false);
+                    document.querySelectorAll('.page-checkbox').forEach(checkbox => {
+                        checkbox.checked = false;
+                        const pageNum = parseInt(checkbox.dataset.pageNum);
+                        updateThumbnailSelection(pageNum, false);
+                    });
+                    updateSelectedCount();
+                    updateDeleteButton();
+                } catch (error) {
+                    loading.style.display = 'none';
+                    showError('Error: ' + error.message);
+                }
+            });
+            
+            // Download button
+            downloadBtn.addEventListener('click', function() {
+                if (pdfBytes) {
+                    const fileName = document.getElementById('fileInput').files[0]?.name || 'modified.pdf';
+                    const newFileName = fileName.replace('.pdf', '') + '_modified.pdf';
+                    download(pdfBytes, newFileName, "application/pdf");
+                }
+            });
+            
+            // Delete selected pages using PDF-lib
+            async function deleteSelectedPages(pagesToDelete) {
+                // Load the PDF document
+                const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+                
+                // Create a new PDF document
+                const newPdf = await PDFLib.PDFDocument.create();
+                
+                // Copy all pages except the ones to delete
+                const pageIndices = Array.from({ length: pdfDoc.getPageCount() }, (_, i) => i);
+                const pagesToKeep = pageIndices.filter(index => !pagesToDelete.includes(index + 1));
+                
+                // Copy pages to the new document
+                const copiedPages = await newPdf.copyPages(pdfDoc, pagesToKeep);
+                copiedPages.forEach(page => newPdf.addPage(page));
+                
+                // Save the new PDF
+                pdfBytes = await newPdf.save();
+            }
+            
+            // Show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.classList.add('active');
+                
+                setTimeout(() => {
+                    errorMessage.classList.remove('active');
+                }, 5000);
+            }
         });
-        
-        // Delete pages button
-        document.getElementById('deletePagesBtn').addEventListener('click', async function() {
-            const pagesToDelete = selectedPages.reduce((acc, val, idx) => {
-                if (val) acc.push(idx + 1);
-                return acc;
-            }, []);
-            
-            if (pagesToDelete.length === 0) {
-                showStatus('Please select at least one page to delete', 'error');
-                return;
-            }
-            
-            if (pagesToDelete.length === pdfDoc.numPages) {
-                showStatus('Cannot delete all pages', 'error');
-                return;
-            }
-            
-            showLoading(true);
-            try {
-                await deleteSelectedPages(pagesToDelete);
-                showStatus(`Deleted pages: ${pagesToDelete.join(', ')}. Ready to download.`, 'success');
-                document.getElementById('downloadBtn').style.display = 'inline-block';
-            } catch (error) {
-                showStatus('Error: ' + error.message, 'error');
-            } finally {
-                showLoading(false);
-            }
-        });
-        
-        // Download button
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            if (pdfBytes) {
-                const fileName = document.getElementById('pdfInput').files[0]?.name || 'modified.pdf';
-                const newFileName = fileName.replace('.pdf', '') + '_modified.pdf';
-                download(pdfBytes, newFileName, "application/pdf");
-            }
-        });
-        
-        // Delete selected pages using PDF-lib
-        async function deleteSelectedPages(pagesToDelete) {
-            // Load the PDF document
-            const pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-            
-            // Create a new PDF document
-            const newPdf = await PDFLib.PDFDocument.create();
-            
-            // Copy all pages except the ones to delete
-            const pageIndices = Array.from({ length: pdfDoc.getPageCount() }, (_, i) => i);
-            const pagesToKeep = pageIndices.filter(index => !pagesToDelete.includes(index + 1));
-            
-            // Copy pages to the new document
-            const copiedPages = await newPdf.copyPages(pdfDoc, pagesToKeep);
-            copiedPages.forEach(page => newPdf.addPage(page));
-            
-            // Save the new PDF
-            pdfBytes = await newPdf.save();
-        }
-        
-        // Show status message
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('statusMessage');
-            statusDiv.textContent = message;
-            statusDiv.className = 'status ' + type;
-            statusDiv.style.display = 'block';
-            
-            setTimeout(() => {
-                statusDiv.style.display = 'none';
-            }, 5000);
-        }
     </script>
 </body>
 </html>

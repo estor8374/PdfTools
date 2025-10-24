@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Excel to PDF Converter | Convert XLS/XLSX to PDF | devwhim.xyz</title>
-    <meta name="description" content="Free online Excel to PDF converter. Convert your Excel spreadsheets to PDF documents quickly and securely. No uploads required - works entirely in your browser.">
-    <meta name="keywords" content="Excel to PDF, convert XLS to PDF, XLS to PDF, Excel to PDF converter, XLSX to PDF, spreadsheet to PDF, devwhim">
+    <title>Word to PDF Converter | Convert DOC/DOCX to PDF | devwhim.xyz</title>
+    <meta name="description" content="Free online Word to PDF converter. Convert your DOC and DOCX files to PDF format quickly and securely. No uploads required - works entirely in your browser.">
+    <meta name="keywords" content="Word to PDF, DOC to PDF, convert Word to PDF, DOCX to PDF, Microsoft Word to PDF, devwhim">
     <meta name="author" content="devwhim.xyz">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.0/mammoth.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         :root {
@@ -212,53 +211,20 @@
             color: var(--primary);
         }
 
-        .options-section {
-            background: #f8fafc;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .options-section h3 {
-            margin-bottom: 1rem;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-
-        .option-group {
-            margin-bottom: 1rem;
-        }
-
-        .option-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        select {
-            width: 100%;
-            padding: 0.6rem;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            background: white;
-        }
-
-        .preview-section {
+        .result-section {
             display: flex;
             flex-direction: column;
             height: 100%;
         }
 
-        .preview-header {
+        .result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
         }
 
-        .preview-content {
+        .preview-area {
             flex: 1;
             width: 100%;
             padding: 1.5rem;
@@ -266,35 +232,13 @@
             border-radius: 8px;
             background-color: white;
             overflow-y: auto;
-            min-height: 400px;
-            max-height: 500px;
+            min-height: 300px;
+            max-height: 400px;
+            line-height: 1.5;
         }
 
-        .preview-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        .preview-table th, .preview-table td {
-            border: 1px solid #e5e7eb;
-            padding: 0.5rem;
-            text-align: left;
-        }
-
-        .preview-table th {
-            background-color: #f3f4f6;
-            font-weight: 600;
-        }
-
-        .preview-table tr:nth-child(even) {
-            background-color: #f9fafb;
-        }
-
-        .controls {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+        .preview-area p {
+            margin-bottom: 1rem;
         }
 
         .features {
@@ -384,10 +328,6 @@
             .footer-links {
                 justify-content: center;
             }
-
-            .controls {
-                flex-direction: column;
-            }
         }
 
         .loading {
@@ -470,15 +410,26 @@
             gap: 0.5rem;
         }
 
-        .sheet-selector {
-            margin-bottom: 1rem;
+        .conversion-info {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f0f4ff;
+            border-radius: 8px;
         }
 
-        .sheet-selector label {
-            display: block;
+        .conversion-info h3 {
             margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--dark);
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .conversion-info ul {
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .conversion-info li {
+            margin-bottom: 0.3rem;
         }
 
         .format-badge {
@@ -497,63 +448,33 @@
     <header>
         <div class="container">
             <div class="logo">
-                <span>📊</span> Excel to PDF Converter
+                <span>📄</span> Word to PDF Converter
             </div>
-            <p>Convert your Excel spreadsheets to PDF documents quickly and securely. No uploads required - works entirely in your browser.</p>
+            <p>Convert your Word documents to PDF format quickly and securely. No uploads required - works entirely in your browser.</p>
         </div>
     </header>
 
     <div class="container">
         <div class="main-content">
             <div class="tool-card">
-                <h2><span>📤</span> Upload Excel File</h2>
+                <h2><span>📤</span> Upload Word Document</h2>
                 <div class="upload-area" id="dropArea">
-                    <i>📄</i>
-                    <p>Drag & drop your Excel file here</p>
+                    <i>📝</i>
+                    <p>Drag & drop your Word file here</p>
                     <p>or</p>
-                    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display: none;">
-                    <button class="btn" id="uploadBtn">Choose Excel File</button>
+                    <input type="file" id="fileInput" accept=".docx,.doc" style="display: none;">
+                    <button class="btn" id="uploadBtn">Choose Word File</button>
                     <div class="stats" style="margin-top: 1rem; justify-content: center;">
                         <div class="stat-item">
-                            <span class="format-badge">XLSX</span>
-                            <span class="format-badge">XLS</span>
-                            <span class="format-badge">CSV</span>
+                            <span class="format-badge">DOCX</span>
+                            <span class="format-badge">DOC</span>
                         </div>
                     </div>
                 </div>
                 <div class="file-info" id="fileInfo">
                     <p>File: <span class="file-name" id="fileName"></span></p>
                     <p>Size: <span id="fileSize"></span></p>
-                    <p>Sheets: <span id="sheetCount">0</span></p>
-                </div>
-                
-                <div class="options-section">
-                    <h3>PDF Options</h3>
-                    <div class="option-group">
-                        <label for="pageSize">Page Size:</label>
-                        <select id="pageSize">
-                            <option value="a4">A4</option>
-                            <option value="letter">Letter</option>
-                            <option value="legal">Legal</option>
-                        </select>
-                    </div>
-                    <div class="option-group">
-                        <label for="pageOrientation">Orientation:</label>
-                        <select id="pageOrientation">
-                            <option value="portrait">Portrait</option>
-                            <option value="landscape">Landscape</option>
-                        </select>
-                    </div>
-                    <div class="option-group">
-                        <label for="fontSize">Font Size:</label>
-                        <select id="fontSize">
-                            <option value="8">8pt</option>
-                            <option value="9">9pt</option>
-                            <option value="10" selected>10pt</option>
-                            <option value="11">11pt</option>
-                            <option value="12">12pt</option>
-                        </select>
-                    </div>
+                    <p>Type: <span id="fileType"></span></p>
                 </div>
                 
                 <div class="progress-container" id="progressContainer">
@@ -565,7 +486,7 @@
                 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
-                    <p>Processing your Excel file...</p>
+                    <p>Converting your document...</p>
                 </div>
                 
                 <div class="success-message" id="successMessage">
@@ -573,34 +494,44 @@
                 </div>
                 
                 <div class="error-message" id="errorMessage">
-                    Error processing Excel file. Please try again with a different file.
+                    Error processing document. Please try again with a different file.
                 </div>
             </div>
             
             <div class="tool-card">
-                <div class="preview-section">
-                    <div class="preview-header">
-                        <h2><span>👁️</span> Data Preview</h2>
-                        <div class="stats">
-                            <div class="stat-item">
-                                <span>Rows:</span>
-                                <span id="rowCount">0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span>Columns:</span>
-                                <span id="colCount">0</span>
-                            </div>
+                <div class="result-section">
+                    <div class="result-header">
+                        <h2><span>👁️</span> Document Preview</h2>
+                        <button class="btn btn-success" id="downloadBtn" disabled>Download PDF</button>
+                    </div>
+                    <div class="preview-area" id="previewArea">
+                        <p>Your document preview will appear here...</p>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span>Characters:</span>
+                            <span id="charCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Words:</span>
+                            <span id="wordCount">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Paragraphs:</span>
+                            <span id="paraCount">0</span>
                         </div>
                     </div>
-                    
-                    <div class="sheet-selector">
-                        <label for="sheetSelect">Select Sheet:</label>
-                        <select id="sheetSelect"></select>
-                    </div>
-                    
-                    <div class="preview-content" id="previewContent">
-                        <p>Your Excel data preview will appear here...</p>
-                    </div>
+                </div>
+                
+                <div class="conversion-info">
+                    <h3>About Word to PDF Conversion</h3>
+                    <ul>
+                        <li>Text content and basic formatting are preserved</li>
+                        <li>Complex formatting may not convert perfectly</li>
+                        <li>Images and tables are converted when possible</li>
+                        <li>Supports both .doc and .docx file formats</li>
+                    </ul>
+                    <p><strong>Note:</strong> This converter extracts text content. Complex formatting may not be preserved.</p>
                 </div>
             </div>
         </div>
@@ -609,7 +540,7 @@
             <div class="feature-card">
                 <div class="feature-icon">🚀</div>
                 <h3>Fast Conversion</h3>
-                <p>Convert Excel to PDF in seconds with our optimized processing engine.</p>
+                <p>Convert Word to PDF in seconds with our optimized processing engine.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🔒</div>
@@ -647,9 +578,6 @@
     </footer>
 
     <script>
-        // Initialize jsPDF
-        const { jsPDF } = window.jspdf;
-        
         document.addEventListener('DOMContentLoaded', function() {
             // DOM elements
             const fileInput = document.getElementById('fileInput');
@@ -658,7 +586,7 @@
             const fileInfo = document.getElementById('fileInfo');
             const fileName = document.getElementById('fileName');
             const fileSize = document.getElementById('fileSize');
-            const sheetCount = document.getElementById('sheetCount');
+            const fileType = document.getElementById('fileType');
             const convertBtn = document.getElementById('convertBtn');
             const progressContainer = document.getElementById('progressContainer');
             const progressBar = document.getElementById('progressBar');
@@ -666,16 +594,15 @@
             const loading = document.getElementById('loading');
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
-            const previewContent = document.getElementById('previewContent');
-            const sheetSelect = document.getElementById('sheetSelect');
-            const rowCount = document.getElementById('rowCount');
-            const colCount = document.getElementById('colCount');
-            const pageSize = document.getElementById('pageSize');
-            const pageOrientation = document.getElementById('pageOrientation');
-            const fontSize = document.getElementById('fontSize');
+            const previewArea = document.getElementById('previewArea');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const charCount = document.getElementById('charCount');
+            const wordCount = document.getElementById('wordCount');
+            const paraCount = document.getElementById('paraCount');
             
-            let workbookData = null;
             let currentFile = null;
+            let pdfBlob = null;
+            let extractedText = '';
             
             // Browse button click
             uploadBtn.addEventListener('click', function() {
@@ -705,10 +632,10 @@
                 
                 if (e.dataTransfer.files.length > 0) {
                     const file = e.dataTransfer.files[0];
-                    if (file.name.endsWith('.xlsx') || file.name.endsWith('.xls') || file.name.endsWith('.csv')) {
+                    if (file.name.endsWith('.docx') || file.name.endsWith('.doc')) {
                         handleFileSelection(file);
                     } else {
-                        showError('Please upload an Excel file (.xlsx, .xls, .csv)');
+                        showError('Please upload a Word document (.docx or .doc)');
                     }
                 }
             });
@@ -718,43 +645,16 @@
                 currentFile = file;
                 fileName.textContent = file.name;
                 fileSize.textContent = formatFileSize(file.size);
+                fileType.textContent = file.name.endsWith('.docx') ? 'DOCX' : 'DOC';
                 
                 fileInfo.classList.add('active');
-                loading.style.display = 'block';
+                convertBtn.disabled = false;
                 successMessage.classList.remove('active');
                 errorMessage.classList.remove('active');
-                previewContent.innerHTML = '<p>Loading Excel data...</p>';
-                convertBtn.disabled = true;
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = new Uint8Array(e.target.result);
-                        workbookData = XLSX.read(data, { type: 'array' });
-                        
-                        // Update sheet count
-                        sheetCount.textContent = workbookData.SheetNames.length;
-                        
-                        // Populate sheet selector
-                        populateSheetSelector();
-                        
-                        // Show preview of first sheet
-                        showSheetPreview(workbookData.SheetNames[0]);
-                        
-                        loading.style.display = 'none';
-                        convertBtn.disabled = false;
-                        
-                    } catch (error) {
-                        console.error('Error loading Excel file:', error);
-                        loading.style.display = 'none';
-                        showError('Error loading Excel file: ' + error.message);
-                    }
-                };
-                reader.onerror = function() {
-                    loading.style.display = 'none';
-                    showError('Error reading file');
-                };
-                reader.readAsArrayBuffer(file);
+                progressContainer.style.display = 'none';
+                previewArea.innerHTML = '<p>Your document preview will appear here...</p>';
+                downloadBtn.disabled = true;
+                resetStats();
             }
             
             // Format file size
@@ -764,64 +664,10 @@
                 else return (bytes / 1048576).toFixed(2) + ' MB';
             }
             
-            // Populate sheet selector
-            function populateSheetSelector() {
-                sheetSelect.innerHTML = '';
-                workbookData.SheetNames.forEach(sheetName => {
-                    const option = document.createElement('option');
-                    option.value = sheetName;
-                    option.textContent = sheetName;
-                    sheetSelect.appendChild(option);
-                });
-                
-                // Add change listener
-                sheetSelect.addEventListener('change', function() {
-                    showSheetPreview(this.value);
-                });
-            }
-            
-            // Show sheet preview
-            function showSheetPreview(sheetName) {
-                const worksheet = workbookData.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                
-                // Update row and column counts
-                rowCount.textContent = jsonData.length - 1; // Subtract header row
-                colCount.textContent = jsonData[0] ? jsonData[0].length : 0;
-                
-                // Create HTML table
-                let html = '<table class="preview-table">';
-                
-                // Add header row
-                if (jsonData.length > 0) {
-                    html += '<thead><tr>';
-                    jsonData[0].forEach(cell => {
-                        html += `<th>${cell || ''}</th>`;
-                    });
-                    html += '</tr></thead>';
-                }
-                
-                // Add data rows
-                if (jsonData.length > 1) {
-                    html += '<tbody>';
-                    for (let i = 1; i < jsonData.length; i++) {
-                        html += '<tr>';
-                        jsonData[i].forEach(cell => {
-                            html += `<td>${cell || ''}</td>`;
-                        });
-                        html += '</tr>';
-                    }
-                    html += '</tbody>';
-                }
-                
-                html += '</table>';
-                previewContent.innerHTML = html;
-            }
-            
-            // Convert Excel to PDF
+            // Convert Word to PDF
             convertBtn.addEventListener('click', async function() {
-                if (!workbookData) {
-                    showError('Please upload an Excel file first.');
+                if (!currentFile) {
+                    showError('Please select a Word file first.');
                     return;
                 }
                 
@@ -830,82 +676,185 @@
                 convertBtn.disabled = true;
                 successMessage.classList.remove('active');
                 errorMessage.classList.remove('active');
+                previewArea.innerHTML = '';
+                downloadBtn.disabled = true;
                 
                 try {
+                    const arrayBuffer = await readFileAsArrayBuffer(currentFile);
+                    
+                    // Update progress
+                    updateProgress(25, "Reading Word document...");
+                    
+                    // Convert Word to text using Mammoth
+                    const result = await mammoth.extractRawText({arrayBuffer: arrayBuffer});
+                    extractedText = result.value;
+                    
+                    // Update progress
+                    updateProgress(50, "Converting to PDF...");
+                    
+                    // Show preview
+                    previewArea.innerHTML = formatPreviewText(extractedText);
+                    
+                    // Update progress
+                    updateProgress(75, "Finalizing PDF...");
+                    
                     // Create PDF
-                    const pdf = new jsPDF({
-                        orientation: pageOrientation.value,
-                        unit: 'mm',
-                        format: pageSize.value
-                    });
+                    await createPdfFile(extractedText, currentFile.name);
                     
-                    const sheetNames = workbookData.SheetNames;
-                    const totalSheets = sheetNames.length;
-                    
-                    for (let i = 0; i < totalSheets; i++) {
-                        const sheetName = sheetNames[i];
-                        const worksheet = workbookData.Sheets[sheetName];
-                        
-                        // Convert sheet to JSON
-                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                        
-                        // Add sheet name as title
-                        if (i > 0) {
-                            pdf.addPage();
-                        }
-                        
-                        pdf.setFontSize(16);
-                        pdf.text(sheetName, 14, 20);
-                        
-                        // Prepare data for autotable
-                        const headers = jsonData[0] || [];
-                        const body = jsonData.slice(1);
-                        
-                        // Add table to PDF
-                        pdf.autoTable({
-                            head: [headers],
-                            body: body,
-                            startY: 25,
-                            styles: {
-                                fontSize: parseInt(fontSize.value),
-                                cellPadding: 3,
-                                overflow: 'linebreak'
-                            },
-                            margin: { top: 20 }
-                        });
-                        
-                        // Update progress
-                        const progress = Math.round(((i + 1) / totalSheets) * 100);
-                        progressBar.value = progress;
-                        progressText.textContent = `Processing sheet ${i + 1} of ${totalSheets} (${progress}%)`;
-                    }
-                    
-                    // Save the PDF
-                    const filename = currentFile.name.replace(/\.[^/.]+$/, '') + '.pdf';
-                    pdf.save(filename);
+                    // Update progress
+                    updateProgress(100, "Conversion complete!");
                     
                     loading.style.display = 'none';
                     progressContainer.style.display = 'none';
                     successMessage.classList.add('active');
-                    convertBtn.disabled = false;
+                    downloadBtn.disabled = false;
+                    
+                    // Update stats
+                    updateStats(extractedText);
                     
                 } catch (error) {
                     console.error('Conversion error:', error);
                     loading.style.display = 'none';
                     progressContainer.style.display = 'none';
                     convertBtn.disabled = false;
-                    showError('Error during conversion: ' + error.message);
+                    showError('Error processing document: ' + error.message);
                 }
             });
+            
+            // Read file as ArrayBuffer
+            function readFileAsArrayBuffer(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+            
+            // Update progress
+            function updateProgress(percent, message) {
+                progressBar.value = percent;
+                progressText.textContent = message;
+            }
+            
+            // Format preview text
+            function formatPreviewText(text) {
+                if (!text.trim()) return '<p style="color: #6b7280; font-style: italic;">No text content found in document.</p>';
+                
+                const paragraphs = text.split('\n\n').filter(p => p.trim().length > 0);
+                let html = '';
+                
+                paragraphs.forEach(para => {
+                    html += `<p>${para}</p>`;
+                });
+                
+                return html;
+            }
+            
+            // Create PDF file using pdf-lib
+            async function createPdfFile(textContent, originalFilename) {
+                const { PDFDocument, rgb } = PDFLib;
+                const pdfDoc = await PDFDocument.create();
+                
+                // Add a new page
+                const page = pdfDoc.addPage([595, 842]); // A4 size in points
+                
+                // Set font and size
+                const font = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+                
+                // Split text into lines that fit the page width
+                const margin = 50;
+                const maxWidth = page.getWidth() - 2 * margin;
+                const fontSize = 12;
+                const lineHeight = fontSize * 1.2;
+                
+                let y = page.getHeight() - margin;
+                const lines = splitTextIntoLines(textContent, font, fontSize, maxWidth);
+                
+                // Add text to the page
+                for (const line of lines) {
+                    if (y < margin) {
+                        // Add new page if we run out of space
+                        const newPage = pdfDoc.addPage([595, 842]);
+                        y = newPage.getHeight() - margin;
+                    }
+                    
+                    page.drawText(line, {
+                        x: margin,
+                        y: y,
+                        size: fontSize,
+                        font: font,
+                        color: rgb(0, 0, 0),
+                    });
+                    
+                    y -= lineHeight;
+                }
+                
+                // Save the PDF
+                const pdfBytes = await pdfDoc.save();
+                pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+            }
+            
+            // Helper function to split text into lines that fit the page width
+            function splitTextIntoLines(text, font, fontSize, maxWidth) {
+                const lines = [];
+                const paragraphs = text.split('\n\n');
+                
+                for (const paragraph of paragraphs) {
+                    const words = paragraph.split(/\s+/);
+                    let currentLine = '';
+                    
+                    for (const word of words) {
+                        const testLine = currentLine ? `${currentLine} ${word}` : word;
+                        const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+                        
+                        if (testWidth > maxWidth && currentLine) {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        } else {
+                            currentLine = testLine;
+                        }
+                    }
+                    
+                    if (currentLine) {
+                        lines.push(currentLine);
+                    }
+                    lines.push(''); // Add empty line between paragraphs
+                }
+                
+                return lines;
+            }
+            
+            // Download PDF
+            downloadBtn.addEventListener('click', function() {
+                if (!pdfBlob) return;
+                
+                const filename = currentFile.name.replace(/\.docx?$/i, '') + '.pdf';
+                saveAs(pdfBlob, filename);
+            });
+            
+            // Update text statistics
+            function updateStats(text) {
+                const chars = text.length;
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+                const paragraphs = text.split('\n\n').filter(p => p.trim().length > 0).length;
+                
+                charCount.textContent = chars.toLocaleString();
+                wordCount.textContent = words.toLocaleString();
+                paraCount.textContent = paragraphs;
+            }
+            
+            // Reset statistics
+            function resetStats() {
+                charCount.textContent = '0';
+                wordCount.textContent = '0';
+                paraCount.textContent = '0';
+            }
             
             // Show error message
             function showError(message) {
                 errorMessage.textContent = message;
                 errorMessage.classList.add('active');
-                
-                setTimeout(() => {
-                    errorMessage.classList.remove('active');
-                }, 5000);
             }
         });
     </script>

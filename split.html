@@ -3,363 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Split PDF Tool | Extract Pages from PDF | devwhim.xyz</title>
-    <meta name="description" content="Free online PDF splitter tool. Extract specific pages from your PDF files quickly and securely. No uploads required - works entirely in your browser.">
-    <meta name="keywords" content="Split PDF, PDF splitter, separate PDF pages, cut page from pdf, pdf tools, extract pdf pages, devwhim">
-    <meta name="author" content="devwhim.xyz">
+    
+    <!-- =================================================================== -->
+    <!-- ========= 🚀 1. PRIMARY SEO META TAGS ============================ -->
+    <!-- =================================================================== -->
+    <title>Split PDF Tool | Extract Pages from PDF Securely</title>
+    <meta name="description" content="Free online PDF splitter. Extract specific pages from any PDF file quickly and securely. No uploads required—all processing is done in your browser.">
+    <!-- 
+      IMPORTANT: You MUST update this href to your page's full, final URL 
+      (e.g., https://devwhim.xyz/split-pdf) 
+    -->
+    <link rel="canonical" href="https://devwhim.xyz/split-pdf-tool"> 
+
+    <!-- =================================================================== -->
+    <!-- ========= 🎨 2. FAVICON & BRANDING =============================== -->
+    <!-- =================================================================== -->
+    <!-- 
+      Generate these files using a free online favicon generator 
+      and place them in your website's root folder.
+    -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- =================================================================== -->
+    <!-- ========= 🔗 3. SOCIAL & OPEN GRAPH (for sharing) ================ -->
+    <!-- =================================================================== -->
+    <!-- Open Graph (Facebook, LinkedIn, etc.) -->
+    <meta property="og:title" content="Split PDF Tool | Secure & Free">
+    <meta property="og:description" content="Extract pages from your PDF files. 100% free, secure, and private. Works entirely in your browser.">
+    <meta property="og:url" content="https://devwhim.xyz/split-pdf-tool"> <!-- MUST UPDATE -->
+    <meta property="og:site_name" content="devwhim.xyz">
+    <meta property="og:type" content="website">
+    <!-- <meta property="og:image" content="https://devwhim.xyz/og-image.png"> --> <!-- Create & link a 1200x630px image -->
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Split PDF Tool | Secure & Free">
+    <meta name="twitter:description" content="Extract pages from your PDF files. 100% free, secure, and private. Works in your browser.">
+    <!-- <meta name="twitter:image" content="https://devwhim.xyz/twitter-image.png"> --> <!-- Create & link an image -->
+    <!-- <meta name="twitter:creator" content="@YourTwitterHandle"> -->
+
+    <!-- =================================================================== -->
+    <!-- ========= 📈 4. SCHEMA MARKUP (for Google) ======================= -->
+    <!-- =================================================================== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Split PDF Tool",
+      "description": "Free online PDF splitter to extract specific pages from your PDF files quickly and securely. No uploads required - works entirely in your browser.",
+      "url": "https://devwhim.xyz/split-pdf-tool",  <!-- MUST UPDATE -->
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Any (Browser-based)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+      "author": {
+        "@type": "Organization",
+        "name": "devwhim.xyz",
+        "url": "https://devwhim.xyz" <!-- MUST UPDATE -->
+      }
+    }
+    </script>
+
+    <!-- =================================================================== -->
+    <!-- ========= ⚡️ 5. STYLES & SCRIPTS ================================= -->
+    <!-- =================================================================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-    <style>
-        :root {
-            --primary: #4361ee;
-            --primary-dark: #3a56d4;
-            --secondary: #7209b7;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --success: #4cc9f0;
-            --border-radius: 12px;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background-color: #f5f7ff;
-            padding: 0;
-            margin: 0;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow);
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .logo span {
-            color: var(--success);
-        }
-
-        header p {
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.9;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .tool-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .tool-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .tool-card h2 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .upload-area {
-            border: 2px dashed #d1d5db;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            cursor: pointer;
-            transition: var(--transition);
-            background-color: #f9fafb;
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary);
-            background-color: #f0f4ff;
-        }
-
-        .upload-area i {
-            font-size: 3rem;
-            color: var(--gray);
-            margin-bottom: 1rem;
-        }
-
-        .upload-area p {
-            color: var(--gray);
-            margin-bottom: 1rem;
-        }
-
-        .btn {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
-            text-align: center;
-            font-size: 1rem;
-        }
-
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: var(--secondary);
-        }
-
-        .btn-secondary:hover {
-            background: #6511a0;
-        }
-
-        .btn-full {
-            width: 100%;
-        }
-
-        .page-controls {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .page-control {
-            flex: 1;
-        }
-
-        .page-control label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        .page-control input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .page-control input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-        }
-
-        .file-info {
-            background: #f0f4ff;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .file-info.active {
-            display: block;
-        }
-
-        .file-info p {
-            margin-bottom: 0.5rem;
-        }
-
-        .file-name {
-            font-weight: 500;
-            color: var(--primary);
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
-
-        .feature-card p {
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .footer-logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .footer-links a {
-            color: #adb5bd;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .copyright {
-            margin-top: 1.5rem;
-            width: 100%;
-            color: #adb5bd;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .footer-links {
-                justify-content: center;
-            }
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            margin: 1rem 0;
-        }
-
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .success-message {
-            background: #d1fae5;
-            color: #065f46;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .success-message.active {
-            display: block;
-        }
-    </style>
+    
+    <!-- External CSS file for faster caching -->
+    <link rel="stylesheet" href="style.css"> 
+    
+    <!-- pdf-lib script, deferred for faster page load -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" defer></script>
 </head>
 <body>
     <header>
         <div class="container">
-            <div class="logo">
+            <!-- <h1> is the most important heading for SEO -->
+            <h1 class="logo">
                 <span>🔪</span> Split PDF Tool
-            </div>
+            </h1>
             <p>Extract specific pages from your PDF files quickly and securely. No uploads required - works entirely in your browser.</p>
         </div>
     </header>
 
-    <div class="container">
+    <!-- Use <main> for the primary content of the page -->
+    <main class="container">
         <div class="main-content">
-            <div class="tool-card">
+            <!-- Use <section> for semantic content grouping -->
+            <section class="tool-card">
                 <h2><span>📄</span> Upload PDF</h2>
                 <div class="upload-area" id="uploadArea">
                     <i>📁</i>
@@ -384,7 +123,7 @@
                     </div>
                 </div>
                 
-                <button class="btn btn-full" onclick="splitPDF()" id="splitBtn">Split & Download PDF</button>
+                <button class="btn btn-full" id="splitBtn">Split & Download PDF</button>
                 
                 <div class="loading" id="loading">
                     <div class="spinner"></div>
@@ -394,23 +133,25 @@
                 <div class="success-message" id="successMessage">
                     PDF successfully split! Your download should start shortly.
                 </div>
-            </div>
+            </section>
             
-            <div class="tool-card">
+            <!-- A separate <section> for instructions and features -->
+            <section class="tool-card">
                 <h2><span>ℹ️</span> How to Use</h2>
                 <ol style="padding-left: 1.5rem; margin-bottom: 1.5rem;">
-                    <li style="margin-bottom: 0.8rem;">Upload your PDF file by dragging it to the area or clicking "Browse Files"</li>
-                    <li style="margin-bottom: 0.8rem;">Set the start and end pages for the section you want to extract</li>
-                    <li style="margin-bottom: 0.8rem;">Click "Split & Download PDF" to process your file</li>
-                    <li>Your new PDF with only the selected pages will download automatically</li>
+                    <li style="margin-bottom: 0.8rem;">Upload your PDF file by dragging it to the area or clicking "Browse Files".</li>
+                    <li style="margin-bottom: 0.8rem;">Set the start and end pages for the section you want to extract.</li>
+                    <li style="margin-bottom: 0.8rem;">Click "Split & Download PDF" to process your file.</li>
+                    <li>Your new PDF with only the selected pages will download automatically.</li>
                 </ol>
                 
                 <h2><span>🔒</span> Privacy & Security</h2>
                 <p>Your PDF files never leave your computer. All processing happens directly in your browser using JavaScript. We don't store, transmit, or have access to any of your files.</p>
-            </div>
+            </section>
         </div>
         
-        <div class="features">
+        <!-- A separate <section> for features -->
+        <section class="features">
             <div class="feature-card">
                 <div class="feature-icon">🚀</div>
                 <h3>Fast Processing</h3>
@@ -431,165 +172,35 @@
                 <h3>Works Everywhere</h3>
                 <p>Use on any device with a modern browser - desktop, tablet, or mobile.</p>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
     
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">devwhim.xyz</div>
                 <div class="footer-links">
-                    <a href="#">Home</a>
-                    <a href="#">Tools</a>
-                    <a href="#">Privacy</a>
-                    <a href="#">Contact</a>
+                    <!-- Update href="#" to real links. This is vital for crawling. -->
+                    <a href="/">Home</a>
+                    <a href="/tools">Tools</a>
+                    <a href="/privacy">Privacy</a>
+                    <a href="/contact">Contact</a>
                 </div>
                 <div class="copyright">
-                    &copy; 2023 devwhim.xyz - Free online PDF tools
+                    <!-- Update the year dynamically or manually -->
+                    &copy; 2025 devwhim.xyz - Free online PDF tools
                 </div>
             </div>
         </div>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const pdfInput = document.getElementById('pdfInput');
-            const browseBtn = document.getElementById('browseBtn');
-            const uploadArea = document.getElementById('uploadArea');
-            const fileInfo = document.getElementById('fileInfo');
-            const fileName = document.getElementById('fileName');
-            const pageCount = document.getElementById('pageCount');
-            const startPage = document.getElementById('startPage');
-            const endPage = document.getElementById('endPage');
-            const splitBtn = document.getElementById('splitBtn');
-            const loading = document.getElementById('loading');
-            const successMessage = document.getElementById('successMessage');
-            
-            // Browse button click
-            browseBtn.addEventListener('click', function() {
-                pdfInput.click();
-            });
-            
-            // File input change
-            pdfInput.addEventListener('change', function(e) {
-                if (e.target.files.length > 0) {
-                    handleFileSelection(e.target.files[0]);
-                }
-            });
-            
-            // Drag and drop functionality
-            uploadArea.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                uploadArea.style.borderColor = 'var(--primary)';
-                uploadArea.style.backgroundColor = '#f0f4ff';
-            });
-            
-            uploadArea.addEventListener('dragleave', function() {
-                uploadArea.style.borderColor = '#d1d5db';
-                uploadArea.style.backgroundColor = '#f9fafb';
-            });
-            
-            uploadArea.addEventListener('drop', function(e) {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#d1d5db';
-                uploadArea.style.backgroundColor = '#f9fafb';
-                
-                if (e.dataTransfer.files.length > 0) {
-                    const file = e.dataTransfer.files[0];
-                    if (file.type === 'application/pdf') {
-                        handleFileSelection(file);
-                    } else {
-                        alert('Please upload a PDF file.');
-                    }
-                }
-            });
-            
-            // Handle file selection
-            function handleFileSelection(file) {
-                fileName.textContent = file.name;
-                
-                // Read the PDF to get page count
-                const fileReader = new FileReader();
-                fileReader.onload = async function() {
-                    try {
-                        const pdfDoc = await PDFLib.PDFDocument.load(fileReader.result);
-                        const pages = pdfDoc.getPageCount();
-                        pageCount.textContent = pages;
-                        
-                        // Set end page to total pages by default
-                        endPage.value = pages;
-                        endPage.max = pages;
-                        startPage.max = pages;
-                        
-                        fileInfo.classList.add('active');
-                    } catch (error) {
-                        console.error('Error loading PDF:', error);
-                        alert('Error reading PDF file. Please make sure it\'s a valid PDF.');
-                    }
-                };
-                fileReader.readAsArrayBuffer(file);
-            }
-            
-            // Update end page when start page changes
-            startPage.addEventListener('change', function() {
-                if (parseInt(startPage.value) > parseInt(endPage.value)) {
-                    endPage.value = startPage.value;
-                }
-            });
-        });
-        
-        async function splitPDF() {
-            const file = document.getElementById('pdfInput').files[0];
-            if (!file) {
-                alert("Please upload a PDF file!");
-                return;
-            }
-
-            const start = parseInt(document.getElementById("startPage").value) - 1;
-            const end = parseInt(document.getElementById("endPage").value) - 1;
-            
-            if (start > end) {
-                alert("Start page cannot be greater than end page!");
-                return;
-            }
-
-            const loading = document.getElementById('loading');
-            const splitBtn = document.getElementById('splitBtn');
-            const successMessage = document.getElementById('successMessage');
-            
-            // Show loading state
-            loading.style.display = 'block';
-            splitBtn.disabled = true;
-            successMessage.classList.remove('active');
-
-            try {
-                const existingPdfBytes = await file.arrayBuffer();
-                const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
-                const newPdf = await PDFLib.PDFDocument.create();
-
-                for (let i = start; i <= end && i < pdfDoc.getPageCount(); i++) {
-                    const [copiedPage] = await newPdf.copyPages(pdfDoc, [i]);
-                    newPdf.addPage(copiedPage);
-                }
-
-                const pdfBytes = await newPdf.save();
-                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "split-pages.pdf";
-                link.click();
-                
-                // Show success message
-                successMessage.classList.add('active');
-            } catch (error) {
-                console.error('Error splitting PDF:', error);
-                alert('An error occurred while processing your PDF. Please try again.');
-            } finally {
-                // Hide loading state
-                loading.style.display = 'none';
-                splitBtn.disabled = false;
-            }
-        }
-    </script>
+    <!-- Notification Modal (replaces alert()) -->
+    <div id="notification" class="notification">
+        <p id="notificationMessage"></p>
+        <button id="notificationClose" class="btn">Close</button>
+    </div>
+    
+    <!-- External JS file, deferred for faster page load -->
+    <script src="script.js" defer></script>
 </body>
-</html>
+            </html>

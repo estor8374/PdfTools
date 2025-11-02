@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found (404) | devwhim.xyz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7ff;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .error-code {
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="error-code">404</h2>
+        <h1>Page Not Found</h1>
+        <p>Sorry, we couldn't find the page you were looking for. It might have been moved, deleted, or maybe you just mistyped the URL.</p>
+        <!-- This link should point to your website's homepage -->
+        <a href="https://devwhim.xyz/" class="btn">Go Back Home</a>
+    </div>
+</body>
+</html>

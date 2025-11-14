@@ -10,30 +10,22 @@
     <title>Split PDF Tool | Extract Pages from PDF Securely</title>
     <meta name="description" content="Free online PDF splitter. Extract specific pages from any PDF file quickly and securely. No uploads required—all processing is done in your browser.split pdf.">
     
-    <!-- 
-      FIX for: LOW - Verify canonical link
-      This tag is already here. You just need to verify that this URL
-      is the *exact* final URL of your page.
-    -->
     <link rel="canonical" href="https://devwhim.xyz/split-pdf-tool"> 
 
     <!-- =================================================================== -->
     <!-- ========= 🎨 2. FAVICON & BRANDING =============================== -->
     <!-- =================================================================== -->
-    <!-- 
-      FIX for: LOW - Missing favicon
-      The *links* are correct. You just need to create and upload
-      these files to your server's root directory.
-    -->
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    <title>Devwhim split tool</title>
+    <!-- 
+      FIX: Removed the duplicate, less descriptive <title> tag that was here.
+    -->
     
     <!-- =================================================================== -->
     <!-- ========= 🔗 3. SOCIAL & OPEN GRAPH (for sharing) ================ -->
     <!-- =================================================================== -->
     <meta property="og:title" content="Split PDF Tool | Secure & Free">
     <meta property="og:description" content="Extract pages from your PDF files. 100% free, secure, and private. Works entirely in your browser.">
-    <meta property="og:url" content="https://devwhim.xyz/split-pdf-tool"> <!-- MUST UPDATE -->
+    <meta property="og:url" content="https://devwhim.xyz/split-pdf-tool">
     <meta property="og:site_name" content="devwhim.xyz">
     <meta property="og:type" content="website">
     <!-- <meta property="og:image" content="https://devwhim.xyz/og-image.png"> -->
@@ -52,8 +44,9 @@
     <!-- ========= 📈 4. SCHEMA MARKUP (for Google) ======================= -->
     <!-- =================================================================== -->
     <!-- 
-      FIX for: MEDIUM - Add structured data
-      This is already included and fixes the issue.
+      FIX: Corrected the JSON-LD syntax below.
+      1. Changed "@type.org" to "@type": "Organization"
+      2. Removed HTML-style comments "<!-- MUST UPDATE -->" which are invalid in JSON.
     -->
     <script type="application/ld+json">
     {
@@ -61,7 +54,7 @@
       "@type": "WebApplication",
       "name": "Split PDF Tool",
       "description": "Free online PDF splitter to extract specific pages from your PDF files quickly and securely. No uploads required - works entirely in your browser.",
-      "url": "https://devwhim.xyz/split-pdf-tool",  <!-- MUST UPDATE -->
+      "url": "https://devwhim.xyz/split-pdf-tool",
       "applicationCategory": "ProductivityApplication",
       "operatingSystem": "Any (Browser-based)",
       "offers": {
@@ -71,9 +64,9 @@
       },
       "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
       "author": {
-        "@type.org",
+        "@type": "Organization",
         "name": "devwhim.xyz",
-        "url": "https://devwhim.xyz" <!-- MUST UPDATE -->
+        "url": "https://devwhim.xyz"
       }
     }
     </script>
@@ -81,10 +74,6 @@
     <!-- =================================================================== -->
     <!-- ========= 📊 5. ANALYTICS (NEW) ================================== -->
     <!-- =================================================================== -->
-    <!-- 
-      FIX for: MEDIUM - Add a Google Analytics script
-      Replace 'G-XXXXXXXXXX' with your own Google Analytics Measurement ID.
-    -->
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2QZ4HV33PW"></script>
     <script>
@@ -99,17 +88,10 @@
     <!-- =================================================================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts..com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- External CSS file (this is render-blocking, which is correct
-         to prevent a flash of unstyled content, but it's now cacheable) -->
     <link rel="stylesheet" href="style.css"> 
     
-    <!-- 
-      FIX for: HIGH - Eliminate render-blocking resources
-      Adding 'defer' to your scripts tells the browser not to
-      block rendering, fixing this high-priority issue.
-    -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js" defer></script>
 </head>
 <body>
@@ -221,10 +203,6 @@
         <button id="notificationClose" class="btn">Close</button>
     </div>
     
-    <!-- 
-      FIX for: HIGH - Eliminate render-blocking resources
-      'defer' ensures this script also does not block rendering.
-    -->
     <script src="script.js" defer></script>
 </body>
-            </html>
+</html>

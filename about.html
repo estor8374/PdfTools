@@ -3,728 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevWhim - Creative Development Resources & Services</title>
-    <meta name="description" content="DevWhim offers creative development resources, tools, and services for developers and designers. Explore our collection of utilities, tutorials, and inspiration.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>About DevWhim | Our Mission and Values</title>
+    <meta name="description" content="Learn about DevWhim, our mission to provide free, secure, and easy-to-use PDF tools for everyone.">
+    <link rel="canonical" href="https://devwhim.xyz/about.html">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    
+    <!-- Shared Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #f59e0b;
-            --dark: #1f2937;
-            --darker: #111827;
-            --light: #f9fafb;
-            --gray: #6b7280;
-            --gray-light: #e5e7eb;
-            --success: #10b981;
-            --border-radius: 12px;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background-color: var(--light);
-            overflow-x: hidden;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        img {
-            max-width: 100%;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 28px;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
-        }
-
-        .section {
-            padding: 80px 0;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-align: center;
-            color: var(--darker);
-        }
-
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: var(--gray);
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto 50px;
-        }
-
-        /* Header */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-        }
-
-        .logo i {
-            margin-right: 8px;
-            color: var(--secondary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-actions {
-            display: flex;
-            gap: 15px;
-        }
-
-        .mobile-toggle {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 120px 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-
-        .hero-content {
-            max-width: 700px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-
-        .hero-subtitle {
-            font-size: 1.3rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .hero .btn-primary {
-            background-color: white;
-            color: var(--primary);
-        }
-
-        .hero .btn-primary:hover {
-            background-color: var(--gray-light);
-        }
-
-        .hero .btn-secondary {
-            border-color: white;
-            color: white;
-        }
-
-        .hero .btn-secondary:hover {
-            background-color: white;
-            color: var(--primary);
-        }
-
-        /* Features Section */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
-
-        .feature-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            text-align: center;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background-color: rgba(99, 102, 241, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            color: var(--primary);
-            font-size: 1.8rem;
-        }
-
-        .feature-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .feature-description {
-            color: var(--gray);
-        }
-
-        /* Tools Section */
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 50px;
-        }
-
-        .tool-card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .tool-icon {
-            width: 60px;
-            height: 60px;
-            background-color: rgba(245, 158, 11, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            color: var(--secondary);
-            font-size: 1.5rem;
-        }
-
-        .tool-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .tool-description {
-            color: var(--gray);
-            margin-bottom: 20px;
-            flex-grow: 1;
-        }
-
-        /* CTA Section */
-        .cta {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            text-align: center;
-            padding: 100px 0;
-        }
-
-        .cta-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .cta-subtitle {
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            opacity: 0.9;
-        }
-
-        .cta .btn-secondary {
-            border-color: white;
-            color: white;
-        }
-
-        .cta .btn-secondary:hover {
-            background-color: white;
-            color: var(--primary);
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--darker);
-            color: white;
-            padding: 70px 0 30px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 40px;
-            height: 3px;
-            background-color: var(--primary);
-        }
-
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-
-        .footer-links a {
-            color: #d1d5db;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: white;
-            padding-left: 5px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            background-color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 30px;
-            text-align: center;
-            color: #9ca3af;
-            font-size: 0.9rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .section-title {
-                font-size: 2.2rem;
-            }
-            
-            .hero-title {
-                font-size: 3rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .mobile-toggle {
-                display: block;
-            }
-            
-            .nav-links {
-                position: fixed;
-                top: 80px;
-                left: 0;
-                width: 100%;
-                background-color: white;
-                flex-direction: column;
-                align-items: center;
-                padding: 30px 0;
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-                transform: translateY(-150%);
-                transition: transform 0.4s ease;
-                z-index: 99;
-            }
-            
-            .nav-links.active {
-                transform: translateY(0);
-            }
-            
-            .nav-actions {
-                display: none;
-            }
-            
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .section {
-                padding: 60px 0;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .section-title {
-                font-size: 1.8rem;
-            }
-            
-            .hero-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .hero-actions .btn {
-                width: 100%;
-                max-width: 250px;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header -->
+    <!-- Shared Header -->
     <header>
         <div class="container">
-            <nav class="navbar">
-                <a href="#" class="logo">
-                    <i class="fas fa-code"></i>
-                    DevWhim
+            <nav class="navbar" role="navigation" aria-label="Main navigation">
+                <a href="/" class="logo" aria-label="DevWhim Home">
+                    <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                    <span>Dev</span>Whim
                 </a>
-                <ul class="nav-links">
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#tools">Tools</a></li>
-                    <li><a href="#resources">Resources</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <a href="#" class="btn btn-secondary">Sign In</a>
-                    <a href="#" class="btn btn-primary">Get Started</a>
-                </div>
-                <div class="mobile-toggle">
-                    <i class="fas fa-bars"></i>
+                <div class="nav-links">
+                    <a href="/#tools">Tools</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy-policy.html">Privacy</a>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Creative Development Resources For Your Next Project</h1>
-                <p class="hero-subtitle">DevWhim provides developers and designers with powerful tools, resources, and inspiration to bring your ideas to life faster and more efficiently.</p>
-                <div class="hero-actions">
-                    <a href="#" class="btn btn-primary">Explore Tools</a>
-                    <a href="#" class="btn btn-secondary">Learn More</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- Page Content -->
+    <main class="container">
+        <article class="tool-card content-article">
+            <h1>About DevWhim</h1>
+            <p>Welcome to DevWhim, your new home for fast, free, and secure PDF tools. We believe that managing documents shouldn't be complicated or expensive. Our mission is to provide simple, powerful, and accessible tools that work for everyone, everywhere.</p>
 
-    <!-- Features Section -->
-    <section class="section" id="features">
-        <div class="container">
-            <h2 class="section-title">Why Choose DevWhim</h2>
-            <p class="section-subtitle">We offer a comprehensive suite of development resources designed to streamline your workflow and boost productivity.</p>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3 class="feature-title">Lightning Fast</h3>
-                    <p class="feature-description">Our tools are optimized for speed, ensuring you get results in seconds, not minutes.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="feature-title">Secure & Private</h3>
-                    <p class="feature-description">Your data and files are processed securely with no permanent storage on our servers.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3 class="feature-title">Developer Friendly</h3>
-                    <p class="feature-description">Clean APIs, comprehensive documentation, and examples for all skill levels.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+            <h2>Our Mission</h2>
+            <p>In a world where data privacy is more important than ever, we saw a problem. Most "free" online tools require you to upload your sensitive files to a server, leaving you to wonder who might be seeing them. We decided to build a better way.</p>
+            <p><strong>Our mission is to provide top-tier PDF utilities that put your privacy first.</strong></p>
+            <p>That's why every tool on DevWhim runs entirely within your own web browser. Your files are never uploaded, never saved, and never seen by us. The work happens on your computer, making our tools as secure as any offline desktop application.</p>
 
-    <!-- Tools Section -->
-    <section class="section" id="tools">
-        <div class="container">
-            <h2 class="section-title">Our Development Tools</h2>
-            <p class="section-subtitle">Explore our collection of utilities designed to simplify common development tasks.</p>
-            
-            <div class="tools-grid">
-                <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-file-pdf"></i>
-                    </div>
-                    <h3 class="tool-title">PDF Utilities</h3>
-                    <p class="tool-description">Merge, split, compress, and convert PDF files with our easy-to-use tools.</p>
-                    <a href="#" class="btn btn-primary">Try Now</a>
-                </div>
-                
-                <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3 class="tool-title">Code Formatters</h3>
-                    <p class="tool-description">Format and beautify your code in multiple languages with customizable options.</p>
-                    <a href="#" class="btn btn-primary">Try Now</a>
-                </div>
-                
-                <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-image"></i>
-                    </div>
-                    <h3 class="tool-title">Image Optimizers</h3>
-                    <p class="tool-description">Compress and convert images without losing quality for faster web performance.</p>
-                    <a href="#" class="btn btn-primary">Try Now</a>
-                </div>
-                
-                <div class="tool-card">
-                    <div class="tool-icon">
-                        <i class="fas fa-cube"></i>
-                    </div>
-                    <h3 class="tool-title">API Testing</h3>
-                    <p class="tool-description">Test and debug your APIs with our comprehensive testing suite and mock servers.</p>
-                    <a href="#" class="btn btn-primary">Try Now</a>
-                </div>
-            </div>
-        </div>
-    </section>
+            <h2>Who We Are</h2>
+            <p>We are a small team of developers and tech enthusiasts who got tired ofwatermarks, registration walls, and insecure "cloud" processing. We built DevWhim first for ourselves, and we're excited to share it with the world. We're committed to keeping our tools 100% free, with no watermarks, and no gotchas.</p>
 
-    <!-- CTA Section -->
-    <section class="cta">
-        <div class="container">
-            <h2 class="cta-title">Ready to Boost Your Development Workflow?</h2>
-            <p class="cta-subtitle">Join thousands of developers who use DevWhim to save time and focus on what matters most - building amazing products.</p>
-            <a href="#" class="btn btn-secondary">Get Started Free</a>
-        </div>
-    </section>
+            <h2>Why Trust DevWhim?</h2>
+            <ul>
+                <li><strong>Ultimate Security:</strong> Your files never leave your device. Period.</li>
+                <li><strong>Completely Free:</strong> All tools are 100% free, forever. No subscriptions, no "pro" features held back.</li>
+                <li><strong>No Watermarks:</strong> We'll never stamp our logo on your documents.</li>
+                <li><strong>No Registration:</strong> We don't need your email or personal info. Just open the page and get to work.</li>
+            </ul>
+            <p>Thank you for choosing DevWhim. We hope our tools make your day a little bit easier.</p>
+        </article>
+    </main>
 
-    <!-- Footer -->
-    <footer>
+    <!-- Shared Footer -->
+    <footer id="contact-footer"> <!-- Changed id to avoid duplicate -->
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>DevWhim</h3>
-                    <p>Creative development resources and tools for developers and designers.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-discord"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-column">
-                    <h3>Resources</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Tutorials</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">Support</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle" aria-hidden="true"></i> About Us</a></li>
+                        <li><a href="/#features"><i class="fas fa-star" aria-hidden="true"></i> Features</a></li>
+                        <li><a href="/#tools"><i class="fas fa-tools" aria-hidden="true"></i> All Tools</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
-                    <h3>Company</h3>
+                    <h3>Support</h3>
                     <ul class="footer-links">
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="contact.html"><i class="fas fa-envelope" aria-hidden="true"></i> Contact Us</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-column">
-                    <h3>Subscribe</h3>
-                    <p>Stay updated with our latest tools and resources.</p>
-                    <form>
-                        <input type="email" placeholder="Your email address" style="width: 100%; padding: 12px; border-radius: var(--border-radius); border: none; margin-bottom: 10px;">
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">Subscribe</button>
-                    </form>
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="privacy-policy.html"><i class="fas fa-shield-alt" aria-hidden="true"></i> Privacy Policy</a></li>
+                    </ul>
                 </div>
             </div>
             
-            <div class="footer-bottom">
-                <p>&copy; 2023 DevWhim.xyz. All rights reserved.</p>
+            <div class="copyright">
+                <p>&copy; 2025 DevWhim.xyz - Free online PDF tools. All rights reserved.</p>
             </div>
         </div>
     </footer>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About DevWhim | Our Mission and Values</title>
+    <meta name="description" content="Learn about DevWhim, our mission to provide free, secure, and easy-to-use PDF tools for everyone.">
+    <link rel="canonical" href="https://devwhim.xyz/about.html">
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Shared Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="Main navigation">
+                <a href="/" class="logo" aria-label="DevWhim Home">
+                    <i class="fas fa-file-pdf" aria-hidden="true"></i>
+                    <span>Dev</span>Whim
+                </a>
+                <div class="nav-links">
+                    <a href="/#tools">Tools</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="privacy-policy.html">Privacy</a>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-    <script>
-        // Mobile menu toggle
-        document.querySelector('.mobile-toggle').addEventListener('click', function() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        });
+    <!-- Page Content -->
+    <main class="container">
+        <article class="tool-card content-article">
+            <h1>About DevWhim</h1>
+            <p>Welcome to DevWhim, your new home for fast, free, and secure PDF tools. We believe that managing documents shouldn't be complicated or expensive. Our mission is to provide simple, powerful, and accessible tools that work for everyone, everywhere.</p>
 
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.querySelector('.nav-links').classList.remove('active');
-            });
-        });
+            <h2>Our Mission</h2>
+            <p>In a world where data privacy is more important than ever, we saw a problem. Most "free" online tools require you to upload your sensitive files to a server, leaving you to wonder who might be seeing them. We decided to build a better way.</p>
+            <p><strong>Our mission is to provide top-tier PDF utilities that put your privacy first.</strong></p>
+            <p>That's why every tool on DevWhim runs entirely within your own web browser. Your files are never uploaded, never saved, and never seen by us. The work happens on your computer, making our tools as secure as any offline desktop application.</p>
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
+            <h2>Who We Are</h2>
+            <p>We are a small team of developers and tech enthusiasts who got tired ofwatermarks, registration walls, and insecure "cloud" processing. We built DevWhim first for ourselves, and we're excited to share it with the world. We're committed to keeping our tools 100% free, with no watermarks, and no gotchas.</p>
+
+            <h2>Why Trust DevWhim?</h2>
+            <ul>
+                <li><strong>Ultimate Security:</strong> Your files never leave your device. Period.</li>
+                <li><strong>Completely Free:</strong> All tools are 100% free, forever. No subscriptions, no "pro" features held back.</li>
+                <li><strong>No Watermarks:</strong> We'll never stamp our logo on your documents.</li>
+                <li><strong>No Registration:</strong> We don't need your email or personal info. Just open the page and get to work.</li>
+            </ul>
+            <p>Thank you for choosing DevWhim. We hope our tools make your day a little bit easier.</p>
+        </article>
+    </main>
+
+    <!-- Shared Footer -->
+    <footer id="contact-footer"> <!-- Changed id to avoid duplicate -->
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>DevWhim</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html"><i class="fas fa-info-circle" aria-hidden="true"></i> About Us</a></li>
+                        <li><a href="/#features"><i class="fas fa-star" aria-hidden="true"></i> Features</a></li>
+                        <li><a href="/#tools"><i class="fas fa-tools" aria-hidden="true"></i> All Tools</a></li>
+                    </ul>
+                </div>
                 
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="contact.html"><i class="fas fa-envelope" aria-hidden="true"></i> Contact Us</a></li>
+                    </ul>
+                </div>
                 
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 100,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    </script>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="privacy-policy.html"><i class="fas fa-shield-alt" aria-hidden="true"></i> Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 DevWhim.xyz - Free online PDF tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
